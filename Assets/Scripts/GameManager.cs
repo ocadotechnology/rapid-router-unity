@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
 	public BoardManager boardScript;
 
-	private int level = 3;
+	private int level = 1;
 
 	// Use this for initialization
 	void Awake () {
@@ -17,8 +16,4 @@ public class GameManager : MonoBehaviour {
 		boardScript.SetupScene (level);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
