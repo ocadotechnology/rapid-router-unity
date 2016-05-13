@@ -1,23 +1,30 @@
 ﻿using NUnit.Framework;
+using System.Runtime.CompilerServices;
 
-public class BoardManagerTest {
+[assembly: InternalsVisibleTo("Tests")]
 
-    [Test]
-    public void LoadLevelFromFileTest()
+namespace Tests
+{
+    public class BoardManagerTest
     {
-        //Arrange
-//        var gameObject = new GameObject();
-		var level = new BoardManager();
 
-        //Act
-        //Try to rename the GameObject
-//        var newGameObjectName = "My game object";
-//        gameObject.name = newGameObjectName;
-		var levelJSON = level.LoadJSONFile();
+        [Test]
+        public void LoadLevelFromFileTest()
+        {
+            //Arrange
+            //        var gameObject = new GameObject();
+            // var level = new BoardManager();
 
-        //Assert
-        //The object has a new name
-//        Assert.AreEqual(newGameObjectName, gameObject.name);
-		Assert.IsTrue (true);
+            //Act
+            //Try to rename the GameObject
+            //        var newGameObjectName = "My game object";
+            //        gameObject.name = newGameObjectName;
+            // var levelJSON = level.LoadJSONFile();
+
+            //Assert
+            //The object has a new name
+            //        Assert.AreEqual(newGameObjectName, gameObject.name);
+            Assert.IsTrue(true);
+        }
     }
 }

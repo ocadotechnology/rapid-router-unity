@@ -1,19 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Zenject;
 
-public class GameManager : MonoBehaviour {
+public class GameManager: IInitializable {
 
-	public BoardManager boardScript;
+	[Inject]
+	BoardManager boardScript;
 
 	private int level = 1;
 
-	// Use this for initialization
-	void Awake () {
-		boardScript = GetComponent<BoardManager> ();
-		InitGame ();
-	}
-
-	void InitGame() {
-		boardScript.SetupScene (level);
-	}
+	[PostInject]
+    public void Initialize()
+    {
+		boardScript.SetupScene(level);
+    }
 	
 }
