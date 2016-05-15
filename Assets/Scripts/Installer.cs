@@ -27,9 +27,17 @@ public class Installer : MonoInstaller
     public class Settings
     {
 
+        public MapSettings mapSettings;
+
         public RoadTiles roadTiles;
 
         public FloorTiles floorTiles;
+        
+        [Serializable]
+        public class MapSettings {
+            public int rows;
+            public int columns;
+        }        
 
         [Serializable]
         public class RoadTiles
