@@ -66,12 +66,15 @@ public class BoardManager : MonoBehaviour, IInitializable
 
     [Inject]
     BoardTranslator translator;
-    
+
+    [Inject]
+    Installer.Settings.MapSettings mapDimensions;
+
     [PostInject]
     public void Initialize() {
         gridPositions = new List<Vector3>();
-        rows = Board.rows;
-        columns = Board.columns;
+        rows = mapDimensions.rows;
+        columns = mapDimensions.columns;
     }
 
     void InitialiseList()

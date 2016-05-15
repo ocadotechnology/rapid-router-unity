@@ -4,8 +4,16 @@ using Zenject;
 public class BoardTranslator
 {
 
-    float halfRows = Board.rows / 2f;
-    float halfColumns = Board.columns / 2f;
+    float halfRows;
+    float halfColumns;
+
+    Installer.Settings.MapSettings mapDimensions;
+
+    public BoardTranslator(Installer.Settings.MapSettings mapDimensions) {
+        this.mapDimensions = mapDimensions;
+        halfRows = mapDimensions.rows / 2f;
+        halfColumns = mapDimensions.columns / 2f;
+    }
     
     public float translateRow(float x)
     {

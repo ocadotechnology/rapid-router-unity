@@ -21,6 +21,7 @@ public class Installer : MonoInstaller
     public void InstallSettings() {
         Container.Bind<Settings.RoadTiles>().ToSingleInstance(_settings.roadTiles);
         Container.Bind<Settings.FloorTiles>().ToSingleInstance(_settings.floorTiles);
+        Container.Bind<Settings.MapSettings>().ToSingleInstance(_settings.mapSettings);
     }
 
     [Serializable]
