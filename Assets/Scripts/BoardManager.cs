@@ -38,19 +38,6 @@ public class Level
 
 public class BoardManager : MonoBehaviour, IInitializable
 {
-
-    public class Count
-    {
-        public int minimum;
-        public int maximum;
-
-        public Count(int min, int max)
-        {
-            minimum = min;
-            maximum = max;
-        }
-    }
-
     public float rows;
     public float columns;
 
