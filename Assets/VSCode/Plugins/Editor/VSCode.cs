@@ -45,16 +45,15 @@ namespace dotBunny.Unity
         {
             get
             {
-		string current = EditorPrefs.GetString("VSCode_CodePath", "");
-		if(current == "" || !VSCodeExists(current))
-		{
-			//Value not set, set to "" or current path is invalid, try to autodetect it
-			//If autodetect fails, a error will be printed and the default value set
-			EditorPrefs.SetString("VSCode_CodePath", autodetectCodePath());
-			//If its not installed or the install folder isn't a "normal" one,
-			//autodetectCodePath will print a error message to the Unity Console
-		}
-                return EditorPrefs.GetString("VSCode_CodePath", current);
+
+#if UNITY_EDITOR_OSX
+                var newPath = "/Applications/Visual Studio Code.app";
+#elif UNITY_EDITOR_WIN
+                var newPath = ProgramFilesx86() + Path.DirectorySeparatorChar + "Microsoft VS Code" + Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar + "code.cmd";
+#else
+                var newPath = "/usr/local/bin/code";
+#endif                
+                return EditorPrefs.GetString("VSCode_CodePath", newPath);
             }
             set 
             {
@@ -367,112 +366,26 @@ namespace dotBunny.Unity
         #endregion
 
         #region Private Members
-        
-        	/// <summary>
-        	/// Determines if the current path to the code executable is valid or not (exists)
-        	/// </summary>
-        	static bool VSCodeExists(string curPath)
-        	{
-                #if UNITY_EDITOR_OSX
-                return System.IO.Directory.Exists(curPath);
-                #else
-                System.IO.FileInfo code = new System.IO.FileInfo(curPath);
-        		return code.Exists;
-                #endif
-        	}
-        	
-        	/// <summary>
-        	/// Print a error message to the Unity Console about not finding the code executable
-        	static void PrintNotFound(string path)
-        	{
-        		UnityEngine.Debug.LogError("Code executable in '" + path + "' not found. Check" +
-        		"Visual Studio Code installation and insert the correct path in the Properties menu");
-        	}
-        
-        	/// <summary>
-        	/// Try to find automatically the installation of VSCode
-        	/// </summary>
-        	static string autodetectCodePath() 
-        	{
-        	// FIXME: Need to query possible paths to the installation of VSCode on other OS X
-        	string[] possiblePaths =
-        	#if UNITY_EDITOR_OSX
-        		{
-        			"/Applications/Visual Studio Code.app"
-        		};
-        	#elif UNITY_EDITOR_WIN
-        	// FIXME: Add additional paths which VSCode can be installed on Windows
-        		{
-        			ProgramFilesx86() + Path.DirectorySeparatorChar + "Microsoft VS Code"
-        			+ Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar + "code.cmd"
-        		};
-        	#else
-        		{
-        			"/usr/bin/code",
-        			"/bin/code",
-        			"/usr/local/bin/code"
-        		};
-        	#endif
-        		for(int i = 0; i < possiblePaths.Length; i++)
-        		{
-        			if(VSCodeExists(possiblePaths[i])) 
-        			{
-        				return possiblePaths[i];
-        			}
-        		}
-        		PrintNotFound(possiblePaths[0]);
-        		return possiblePaths[0]; //returns the default one, printing a warning message 'executable not found'
-        	}
-
-		/// <summary>
-		/// Parse given folders as parameters and check for spaces
-		/// </summary>
-		static string EscapePathSpaces(string args)
-		{
-			string newargs = "";
-			//Check for arguments that start with a quote and check for spaces inside it
-			for (int i = 0; i < args.Length; i++) {
-				//Check each character in the string. If the character next to it isn't a
-				//argument character (- or --) or a quote ("), escape it with "\ "
-				string current = args.Substring(i, 1); //get current character as string
-				string next = (i < args.Length - 1 ? args.Substring (i + 1, 1) : ""); //get the next character
-				bool isSpace = (current == " ");
-				bool nextIsArgChar = (next == "-");
-				bool nextIsQuoteChar = (next == "\"");
-				if (!isSpace) {
-					newargs += current;
-				} else {
-					newargs += (nextIsArgChar || nextIsQuoteChar ? current : @"\ ");
-				}
-			}
-			return newargs;
-		}
 
         /// <summary>
-        /// Call VSCode with arguments
+        /// Call VSCode with arguements
         /// </summary>
         static void CallVSCode(string args)
         {
             System.Diagnostics.Process proc = new System.Diagnostics.Process();
-            if(!VSCodeExists(CodePath))
-            {
-            	PrintNotFound(CodePath);
-            	return; //Executable not found. Stop execution
-            }
 
-			//Escaping spaces in the name isn't needed in a Windows environment
-			//So for OS X and Linux/Unix, call EscapePathScapes(args) instead of args
 #if UNITY_EDITOR_OSX
             proc.StartInfo.FileName = "open";
-	    proc.StartInfo.Arguments = " -n -b \"com.microsoft.VSCode\" --args " + EscapePathSpaces(args);
+            proc.StartInfo.Arguments = " -n -b \"com.microsoft.VSCode\" --args " + args;
             proc.StartInfo.UseShellExecute = false;
 #elif UNITY_EDITOR_WIN
             proc.StartInfo.FileName = CodePath;
-	    proc.StartInfo.Arguments = EscapePathSpaces(args);
+            proc.StartInfo.Arguments = args;
             proc.StartInfo.UseShellExecute = false;
 #else
+            //TODO: Allow for manual path to code?
             proc.StartInfo.FileName = CodePath;
-	    proc.StartInfo.Arguments = EscapePathSpaces(args);
+            proc.StartInfo.Arguments = args;
             proc.StartInfo.UseShellExecute = false;
 #endif
             proc.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
