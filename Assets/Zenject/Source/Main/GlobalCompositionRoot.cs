@@ -93,7 +93,7 @@ namespace Zenject
         {
             Assert.That(isValidating || root != null);
 
-            var container = new DiContainer();
+            var container = new DiContainer(StaticCompositionRoot.Container);
 
             container.IsValidating = isValidating;
 
