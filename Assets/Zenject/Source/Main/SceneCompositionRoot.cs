@@ -8,7 +8,7 @@ using ModestTree;
 using ModestTree.Util;
 using UnityEngine;
 
-#if UNITY_5_3
+#if UNITY_5_3_OR_NEWER
 using UnityEngine.SceneManagement;
 #endif
 
@@ -77,12 +77,21 @@ namespace Zenject
             Assert.IsNull(Container);
             Assert.IsNull(RootFacade);
 
+            // Record all the injectable components in the scene BEFORE installing the installers
+            // This is nice for cases where the user calls InstantiatePrefab<>, etc. in their installer,
+            // it doesn't inject on the game object twice
+            var injectableComponentsInScene = GetInjectableComponents().ToList();
+
             Log.Debug("Initializing SceneCompositionRoot in scene '{0}'", this.gameObject.scene.name);
             _container = CreateContainer(
                 false, GlobalCompositionRoot.Instance.Container, extraInstallers);
 
             Log.Debug("SceneCompositionRoot: Finished install phase.  Injecting into scene...");
-            InjectObjectsInScene();
+
+            foreach (var component in injectableComponentsInScene)
+            {
+                _container.Inject(component);
+            }
 
             Log.Debug("SceneCompositionRoot: Resolving root IFacade...");
             _rootFacade = _container.Resolve<IFacade>();
@@ -164,13 +173,18 @@ namespace Zenject
                 .Where(x => (includeInactive || x.activeSelf) && x.transform.parent == null && x.GetComponent<GlobalCompositionRoot>() == null && (x.scene == scene || DecoratedScenes.Contains(x.scene)));
         }
 
-        void InjectObjectsInScene()
+        IEnumerable<Component> GetInjectableComponents()
         {
-            Log.Debug("Injecting all objects in scene '{0}'", this.gameObject.scene.name);
-
-            foreach (var rootObj in GetSceneRootObjects(this.gameObject.scene, !OnlyInjectWhenActive))
+            foreach (var root in GetSceneRootObjects(this.gameObject.scene, !OnlyInjectWhenActive))
             {
-                _container.InjectGameObject(rootObj, true, !OnlyInjectWhenActive);
+                foreach (var component in UnityUtil.GetComponentsInChildrenBottomUp(
+                    root, !OnlyInjectWhenActive))
+                {
+                    if (component != null && !component.GetType().DerivesFrom<MonoInstaller>())
+                    {
+                        yield return component;
+                    }
+                }
             }
         }
 

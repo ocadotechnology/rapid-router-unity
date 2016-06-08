@@ -9,7 +9,7 @@ using UnityEditor;
 using UnityEngine;
 using ModestTree;
 
-#if UNITY_5_3
+#if UNITY_5_3_OR_NEWER
 using UnityEditor.SceneManagement;
 #endif
 
@@ -190,7 +190,7 @@ namespace Zenject
 
         static string GetActiveScene()
         {
-#if UNITY_5_3
+#if UNITY_5_3_OR_NEWER
             return EditorSceneManager.GetActiveScene().path;
 #else
             return EditorApplication.currentScene;
@@ -199,7 +199,7 @@ namespace Zenject
 
         public static void OpenScene(string scenePath)
         {
-#if UNITY_5_3
+#if UNITY_5_3_OR_NEWER
             EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
 #else
             EditorApplication.OpenScene(scenePath);
@@ -208,7 +208,7 @@ namespace Zenject
 
         public static void OpenSceneAdditive(string scenePath)
         {
-#if UNITY_5_3
+#if UNITY_5_3_OR_NEWER
             EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
 #else
             EditorApplication.OpenSceneAdditive(scenePath);
@@ -379,7 +379,7 @@ namespace Zenject
             }
             finally
             {
-#if UNITY_5_3
+#if UNITY_5_3_OR_NEWER
                 EditorSceneManager.CloseScene(EditorSceneManager.GetSceneByPath(scenePath), true);
 #else
                 foreach (var newObject in newRootObjects)

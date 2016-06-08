@@ -9,7 +9,7 @@ using ModestTree;
 using ModestTree.Util;
 
 #if !ZEN_NOT_UNITY3D
-#if UNITY_5_3
+#if UNITY_5_3_OR_NEWER
 using UnityEngine.SceneManagement;
 #endif
 using UnityEngine;
@@ -65,7 +65,7 @@ namespace Zenject
 
         static void UnityLoadScene(string levelName, bool isAdditive)
         {
-#if UNITY_5_3
+#if UNITY_5_3_OR_NEWER
             SceneManager.LoadScene(levelName, isAdditive ? LoadSceneMode.Additive : LoadSceneMode.Single);
 #else
             if (isAdditive)
@@ -123,7 +123,7 @@ namespace Zenject
             }
         }
 
-#if UNITY_5_3
+#if UNITY_5_3_OR_NEWER
         public static IEnumerator LoadSceneAdditiveWithContainerAsync(string levelName, DiContainer parentContainer)
         {
             return LoadSceneAdditiveWithContainerAsync(levelName, parentContainer, null);
@@ -141,18 +141,18 @@ namespace Zenject
 
             yield return asyncOp;
 
-            var scene = SceneManager.GetSceneByName(levelName);
+            var newScene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
 
-            if (scene.IsValid())
+            if (newScene.IsValid())
             {
-                foreach (var go in scene.GetRootGameObjects())
+                foreach (var go in newScene.GetRootGameObjects())
                 {
                     parentContainer.InjectGameObject(go);
                 }
 
                 if (callback != null)
                 {
-                    callback(scene);
+                    callback(newScene);
                 }
             }
         }
