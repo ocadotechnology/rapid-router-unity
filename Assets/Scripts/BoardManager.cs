@@ -8,9 +8,9 @@ using Zenject;
 public enum Direction : int
 {
     North = 0,
-    East = 90,
+    East = -90,
     South = 180,
-    West = 270
+    West = 90
 };
 
 [Serializable]
@@ -81,8 +81,8 @@ public class BoardManager : MonoBehaviour, IInitializable
         Level level = LoadJSONFile();
         SetupBoard();
         roadDrawer.SetupOrigin(level.origin);
-        HashSet<GameObject> roadObjects = roadDrawer.SetupRoadSegments(level.path);
-        // roadDrawer.SetupDestinations(level.destinationCoords);
+        GameObject[] roadObjects = roadDrawer.SetupRoadSegments(level.path);
+        roadDrawer.SetupDestinations(level.destinationCoords);
         foreach (GameObject roadObject in roadObjects)
         {
             roadObject.transform.SetParent(boardHolder);
