@@ -35,12 +35,12 @@ namespace Road
 
         }
 
-        public HashSet<GameObject> SetupRoadSegments(PathNode[] nodes)
+        public GameObject[] SetupRoadSegments(PathNode[] nodes)
         {
-            HashSet<GameObject> gameObjects = new HashSet<GameObject>();
+            GameObject[] gameObjects = new GameObject[nodes.Length];
             for (int currentIndex = 0; currentIndex < nodes.Length; currentIndex++)
             {
-                gameObjects.Add(SetupRoadSegment(nodes, currentIndex));
+                gameObjects[currentIndex] = SetupRoadSegment(nodes, currentIndex);
             }
             return gameObjects;
         }
@@ -188,11 +188,11 @@ namespace Road
         {
             if (subjectNode.coords.x < otherNode.coords.x)
             {
-                return Direction.West;
+                return Direction.East;
             }
             else if (subjectNode.coords.x > otherNode.coords.x)
             {
-                return Direction.East;
+                return Direction.West;
             }
             else if (subjectNode.coords.y < otherNode.coords.y)
             {
