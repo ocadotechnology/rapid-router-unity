@@ -27,7 +27,7 @@ namespace Road
             Direction direction = StringToDirection(origin.direction);
             Coordinate coords = origin.coords;
             return Instantiate(tiles.cfcTile, new Vector3(translator.translateRow(coords.x), translator.translateColumn(coords.y), 0f),
-            Quaternion.AngleAxis((int)direction, new Vector3(0, 0, 1))) as GameObject;
+            Quaternion.Euler(0, 0, (float)direction)) as GameObject;
         }
 
         public void SetupDestinations(Coordinate[] destinationNodes)
@@ -71,7 +71,7 @@ namespace Road
             float x = translator.translateRow(node.coords.x);
             float y = translator.translateColumn(node.coords.y);
             return Instantiate(tiles.deadEndRoadTile, new Vector3(x, y, 0f),
-                Quaternion.AngleAxis((int)direction, new Vector3(0, 0, 1))) as GameObject;
+                Quaternion.Euler(0, 0, (float)direction)) as GameObject;
         }
 
         public GameObject DrawStraightOrTurnSegment(PathNode[] nodes, PathNode node)
@@ -82,7 +82,7 @@ namespace Road
             Direction direction2 = RelativeDirection(node, connectedNode2);
             if (AreOppositeDirections(direction1, direction2))
             {
-                return DrawStraightSegment(node, direction1);
+                return DrawStraightSegment(node, direction2);
             }
             else
             {
@@ -95,39 +95,39 @@ namespace Road
             float x = translator.translateRow(node.coords.x);
             float y = translator.translateColumn(node.coords.y);
             return Instantiate(tiles.straightRoadTile, new Vector3(x, y, 0f),
-                Quaternion.AngleAxis((int)direction, new Vector3(0, 0, 1))) as GameObject;
+                Quaternion.Euler(0, 0, (float)direction)) as GameObject;
         }
 
         public GameObject DrawTurnSegment(PathNode node, Direction direction1, Direction direction2)
         {
             float x = translator.translateRow(node.coords.x);
             float y = translator.translateColumn(node.coords.y);
-            int rotationAngle = GetRotationAngleForTurnRoad(direction1, direction2);
+            float rotationAngle = GetRotationAngleForTurnRoad(direction1, direction2);
             return Instantiate(tiles.turnRoadTile, new Vector3(x, y, 0f),
-            Quaternion.AngleAxis(rotationAngle, new Vector3(0, 0, 1))) as GameObject;
+            Quaternion.Euler(0, 0, rotationAngle)) as GameObject;
         }
 
-        private int GetRotationAngleForTurnRoad(Direction direction1, Direction direction2)
+        private float GetRotationAngleForTurnRoad(Direction direction1, Direction direction2)
         {
             HashSet<Direction> directions = new HashSet<Direction>();
             directions.Add(direction1);
             directions.Add(direction2);
-            int rotationAngle = 0;
+            float rotationAngle = 0;
             if (directions.Contains(Direction.North) && directions.Contains(Direction.East))
             {
-                rotationAngle = (int)Direction.North;
+                rotationAngle = (float)Direction.North;
             }
             else if (directions.Contains(Direction.South) && directions.Contains(Direction.East))
             {
-                rotationAngle = (int)Direction.East;
+                rotationAngle = (float)Direction.East;
             }
             else if (directions.Contains(Direction.North) && directions.Contains(Direction.West))
             {
-                rotationAngle = (int)Direction.West;
+                rotationAngle = (float)Direction.West;
             }
             else if (directions.Contains(Direction.South) && directions.Contains(Direction.West))
             {
-                rotationAngle = (int)Direction.South;
+                rotationAngle = (float)Direction.South;
             }
             return rotationAngle;
         }
@@ -141,7 +141,7 @@ namespace Road
             Direction direction3 = RelativeDirection(node, nodes[node.connectedNodes[2]]);
             int rotationAngle = GetRotationAngleForTJunctionRoad(direction1, direction2, direction3);
             return Instantiate(tiles.tJunctionTile, new Vector3(x, y, 0f),
-            Quaternion.AngleAxis((int)rotationAngle, new Vector3(0, 0, 1))) as GameObject;
+            Quaternion.Euler(0, 0, rotationAngle)) as GameObject;
         }
 
         private int GetRotationAngleForTJunctionRoad(Direction direction1, Direction direction2, Direction direction3)
