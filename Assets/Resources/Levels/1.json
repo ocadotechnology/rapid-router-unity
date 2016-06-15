@@ -1,0 +1,45 @@
+{
+  "path": [
+    {
+      "coordinate": [
+        0,
+        3
+      ],
+      "connectedNodes": [
+        1
+      ]
+    },
+    {
+      "coordinate": [
+        1,
+        3
+      ],
+      "connectedNodes": [
+        0,
+        2
+      ]
+    },
+    {
+      "coordinate": [
+        2,
+        3
+      ],
+      "connectedNodes": [
+        1
+      ]
+    }
+  ],
+  "origin": {
+    "coordinate": [
+      0,
+      3
+    ],
+    "direction": "E"
+  },
+  "destinations": [
+    [
+      2,
+      3
+    ]
+  ]
+}
