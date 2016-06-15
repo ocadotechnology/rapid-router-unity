@@ -76,9 +76,9 @@ public class BoardManager : MonoBehaviour, IInitializable
         }
     }
 
-    private void SetupLevel()
+    private void SetupLevel(int levelNumber)
     {
-        Level level = LoadJSONFile();
+        Level level = LoadJSONFile(levelNumber);
         SetupBoard();
         roadDrawer.SetupOrigin(level.origin);
         GameObject[] roadObjects = roadDrawer.SetupRoadSegments(level.path);
@@ -105,14 +105,14 @@ public class BoardManager : MonoBehaviour, IInitializable
     {
         InitialiseList();
         boardHolder = new GameObject("Board").transform;
-        SetupLevel();
+        SetupLevel(level);
     }
 
 
     // Use this for initialization
-    public Level LoadJSONFile()
+    public Level LoadJSONFile(int level)
     {
-        TextAsset levelTextAsset = (TextAsset)Resources.Load("Levels/1", typeof(TextAsset));
+        TextAsset levelTextAsset = (TextAsset)Resources.Load("Levels/" + level, typeof(TextAsset));
         string levelText = levelTextAsset.text;
         return JsonUtility.FromJson<Level>(levelText);
     }
