@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B71F2201-3382-46B3-A9C6-219A72954905}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Zenject_editor</RootNamespace>
+    <AssemblyName>Zenject-editor</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <IntermediateOutputPath>..\..\..\..\..\AssemblyBuild\Temp\Debug\</IntermediateOutputPath>
+    <BaseIntermediateOutputPath>..\..\..\..\..\AssemblyBuild\Temp\Debug\</BaseIntermediateOutputPath>
+    <OutputPath>..\..\..\..\..\AssemblyBuild\Bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;UNITY_5_3</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <IntermediateOutputPath>..\..\..\..\..\AssemblyBuild\Temp\Release\</IntermediateOutputPath>
+    <BaseIntermediateOutputPath>..\..\..\..\..\AssemblyBuild\Temp\Release\</BaseIntermediateOutputPath>
+    <OutputPath>..\..\..\..\..\AssemblyBuild\Bin\Release\</OutputPath>
+    <DefineConstants>TRACE;UNITY_5_3</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEditor">
+      <HintPath>..\..\..\..\..\AssemblyBuild\Libraries\Unity\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\AssemblyBuild\Libraries\Unity\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Zenject.csproj">
+      <Project>{46f25a62-2e29-48cb-95f3-bdbcb0976ddc}</Project>
+      <Name>Zenject</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ObjectGraphVisualizer.cs" />
+    <Compile Include="SceneCompositionRootEditor.cs" />
+    <Compile Include="SceneDecoratorCompositionRootEditor.cs" />
+    <Compile Include="UnityEditorUtil.cs" />
+    <Compile Include="UnityInspectorListEditor.cs" />
+    <Compile Include="ZenEditorUtil.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
