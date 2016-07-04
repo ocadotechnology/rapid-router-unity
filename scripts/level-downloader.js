@@ -17,12 +17,20 @@ function downloadLevels(levels) {
         var url = level.url + 'map/?format=json'
         unirest.get(url).strictSSL(false).end((res) => {
             if (res.body) {
-                writeLevelToFile(level.name, res.body, () => {
+            	var levelData = processLevel(res.body);
+                writeLevelToFile(level.name, levelData, () => {
                     downloadLevels(levels);
                 });
             }
         });
     }
+}
+
+function processLevel(level) {
+	level.path = JSON.parse(level.path);
+	level.origin = JSON.parse(level.origin);
+	level.destinations = JSON.parse(level.destinations);
+	return level;
 }
 
 function writeLevelToFile(level, data, completion) {
