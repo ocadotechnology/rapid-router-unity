@@ -13,7 +13,6 @@ public enum Direction : int
     West = -270
 };
 
-[Serializable]
 public class Level
 {
     public PathNode[] path;
