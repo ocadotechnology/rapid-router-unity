@@ -1,8 +1,5 @@
 using System;
 
-
-
-[Serializable]
 public class Node
 {
     public Coordinate coords
@@ -16,13 +13,11 @@ public class Node
     public int[] coordinate;
 }
 
-[Serializable]
 public class PathNode : Node
 {
     public int[] connectedNodes;
 }
 
-[Serializable]
 public class OriginNode : Node
 {
     public String direction;
