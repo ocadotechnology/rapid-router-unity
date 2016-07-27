@@ -40,6 +40,8 @@ public class BoardManager : MonoBehaviour, IInitializable
     public float rows;
     public float columns;
 
+    public static Level currentLevel;
+
 
     [Inject]
     Installer.Settings.FloorTiles tiles;
@@ -77,13 +79,14 @@ public class BoardManager : MonoBehaviour, IInitializable
 
     private void SetupLevel(int levelNumber)
     {
-        Level level = LevelReader.ReadLevelFromFile(levelNumber);
+        currentLevel = LevelReader.ReadLevelFromFile(levelNumber);
         SetupBoard();
-        roadDrawer.SetupOrigin(level.origin);
-        GameObject[] roadObjects = roadDrawer.SetupRoadSegments(level.path);
-        roadDrawer.SetupDestinations(level.destinationCoords);
+        roadDrawer.SetupOrigin(currentLevel.origin);
+        GameObject[] roadObjects = roadDrawer.SetupRoadSegments(currentLevel.path);
+        roadDrawer.SetupDestinations(currentLevel.destinationCoords);
         foreach (GameObject roadObject in roadObjects)
         {
+            roadObject.isStatic = true;
             roadObject.transform.SetParent(boardHolder);
         }
     }
@@ -95,6 +98,7 @@ public class BoardManager : MonoBehaviour, IInitializable
             for (int y = 0; y < rows; y++)
             {
                 GameObject grassObject = Instantiate(tiles.grassTile, new Vector3(translator.translateRow(x), translator.translateColumn(y), 0f), Quaternion.identity) as GameObject;
+                grassObject.isStatic = true;
                 grassObject.transform.SetParent(boardHolder);
             }
         }
