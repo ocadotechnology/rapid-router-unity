@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public class Coordinate
@@ -10,5 +11,11 @@ public class Coordinate
     {
         this.x = x;
         this.y = y;
+    }
+
+    public Vector3 vector {
+        get {
+            return new Vector3(x, y, 0);
+        }
     }
 }
