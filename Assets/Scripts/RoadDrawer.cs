@@ -206,7 +206,7 @@ namespace Road
             return Direction.North;
         }
 
-        public Direction StringToDirection(String directionString)
+        public static Direction StringToDirection(String directionString)
         {
             switch (directionString)
             {

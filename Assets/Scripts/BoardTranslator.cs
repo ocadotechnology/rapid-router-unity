@@ -1,5 +1,6 @@
 using System;
 using Zenject;
+using UnityEngine;
 
 public class BoardTranslator
 {
@@ -23,6 +24,10 @@ public class BoardTranslator
     public float translateColumn(float y)
     {
         return y - halfColumns;
+    }
+
+    public Vector3 translateVector(Vector3 vector) {
+        return new Vector3(translateRow(vector.x), translateColumn(vector.y), 0);
     }
 
 }
