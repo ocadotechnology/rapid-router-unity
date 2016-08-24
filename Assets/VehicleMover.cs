@@ -3,6 +3,7 @@ using System.Collections;
 using DG.Tweening;
 using Zenject;
 using Road;
+using UnityEngine.UI;
 
 public class VehicleMover : MonoBehaviour
 {
@@ -33,19 +34,31 @@ public class VehicleMover : MonoBehaviour
     {
         if (Input.GetKey("up") && !doingSomething)
         {
-            StartCoroutine(Forward(van.transform, 1));
-            step++;
+            StartForward();
         }
         else if (Input.GetKey("left") && !doingSomething)
         {
-            StartCoroutine(Left(van.transform, 1));
-            step++;
+            StartLeft();
         }
         else if (Input.GetKey("right") && !doingSomething)
         {
-            StartCoroutine(Right(van.transform, 1));
-            step++;
+            StartRight();
         }
+    }
+
+    public void StartLeft() {
+        StartCoroutine(Left(van.transform, 1));
+        step++;
+    }
+
+    public void StartRight() {
+        StartCoroutine(Right(van.transform, 1));
+        step++;
+    }
+
+    public void StartForward() {
+        StartCoroutine(Forward(van.transform, 1));
+        step++;
     }
 
     private IEnumerator Left(Transform transform, float duration)
@@ -80,7 +93,7 @@ public class VehicleMover : MonoBehaviour
         doingSomething = false;
     }
 
-    private Vector3 Deg2LocForLeft(float degrees)
+    Vector3 Deg2LocForLeft(float degrees)
     {
         Vector3 vector;
         if (degrees == 0)
