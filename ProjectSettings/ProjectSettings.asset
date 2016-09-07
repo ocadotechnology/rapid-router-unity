@@ -6,7 +6,7 @@ PlayerSettings:
   serializedVersion: 8
   AndroidProfiler: 0
   defaultScreenOrientation: 2
-  targetDevice: 2
+  targetDevice: 1
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
@@ -89,8 +89,8 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: com.unity.sampleassets
-  bundleVersion: 1.0
+  bundleIdentifier: education.codeforlife.rapid-router
+  bundleVersion: 0.1
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
@@ -105,7 +105,7 @@ PlayerSettings:
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
   iPhoneScriptCallOptimization: 0
-  iPhoneBuildNumber: 0
+  iPhoneBuildNumber: 1
   ForceInternetPermission: 0
   ForceSDCardPermission: 0
   CreateWallpaper: 0
@@ -116,7 +116,7 @@ PlayerSettings:
     serializedVersion: 2
     m_Bits: 238
   iPhoneSdkVersion: 988
-  iPhoneTargetOSVersion: 22
+  iPhoneTargetOSVersion: 40
   tvOSSdkVersion: 0
   tvOSTargetOSVersion: 900
   uIPrerenderedIcon: 0
