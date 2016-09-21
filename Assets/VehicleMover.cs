@@ -9,7 +9,7 @@ public class VehicleMover : MonoBehaviour
 {
     GameObject van;
 
-    bool doingSomething = false;
+    bool vanMoving = false;
 
     Level level;
 
@@ -32,65 +32,72 @@ public class VehicleMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey("up") && !doingSomething)
+        if (Input.GetKey("up"))
         {
             StartForward();
         }
-        else if (Input.GetKey("left") && !doingSomething)
+        else if (Input.GetKey("left"))
         {
             StartLeft();
         }
-        else if (Input.GetKey("right") && !doingSomething)
+        else if (Input.GetKey("right"))
         {
             StartRight();
         }
     }
 
     public void StartLeft() {
-        StartCoroutine(Left(van.transform, 1));
-        step++;
+        if (!vanMoving)
+        {
+            StartCoroutine(Left(van.transform, 1));
+            step++;
+        }
     }
 
     public void StartRight() {
-        StartCoroutine(Right(van.transform, 1));
-        step++;
+        if (!vanMoving) {
+            StartCoroutine(Right(van.transform, 1));
+            step++;
+        }
     }
 
     public void StartForward() {
-        StartCoroutine(Forward(van.transform, 1));
-        step++;
+        if (!vanMoving) {
+            StartCoroutine(Forward(van.transform, 1));
+            step++;
+        }
     }
 
     private IEnumerator Left(Transform transform, float duration)
     {
-        doingSomething = true;
+        vanMoving = true;
         Sequence sequence = DOTween.Sequence();
         sequence.Append(transform.DOPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForLeft(transform.rotation.eulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D).SetEase(Ease.InOutQuad).SetRelative());
         sequence.Join(transform.DORotateQuaternion(Quaternion.Euler(0, 0, 90), duration).SetEase(Ease.InOutCubic).SetRelative());
         sequence.Play();
         yield return new WaitForSeconds(duration);
-        doingSomething = false;
+        vanMoving = false;
     }
 
     private IEnumerator Right(Transform transform, float duration)
     {
-        doingSomething = true;
+        vanMoving = true;
         Sequence sequence = DOTween.Sequence();
         sequence.Append(transform.DOPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForRight(transform.rotation.eulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D).SetEase(Ease.InOutQuad).SetRelative());
         sequence.Join(transform.DORotateQuaternion(Quaternion.Euler(0, 0, -90), duration).SetEase(Ease.InOutCubic).SetRelative());
         sequence.Play();
         yield return new WaitForSeconds(duration);
-        doingSomething = false;
+        vanMoving = false;
     }
 
     private IEnumerator Forward(Transform transform, float duration)
     {
-        doingSomething = true;
+        vanMoving = true;
         print(transform.rotation.eulerAngles);
         var newDirection = new Vector3(-Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), Mathf.Cos(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), 0);
         transform.DOMove(newDirection, duration).SetRelative();
         yield return new WaitForSeconds(duration);
-        doingSomething = false;
+        vanMoving = false;
     }
 
     Vector3 Deg2LocForLeft(float degrees)
