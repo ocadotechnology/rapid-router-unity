@@ -27,7 +27,7 @@ public class LevelManager : MonoBehaviour
 		dropdown.captionText.alignment = TextAnchor.MiddleCenter;
 	}
 
-	public void Level_Change(int levelSelectIndex) {
+	public void LevelChange(int levelSelectIndex) {
 		boardScript.SetupScene (levelSelectIndex + 1);
 	}
 }

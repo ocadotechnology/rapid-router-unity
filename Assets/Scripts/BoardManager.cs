@@ -65,11 +65,7 @@ public class BoardManager : MonoBehaviour, IInitializable
         rows = mapDimensions.rows;
         columns = mapDimensions.columns;
     }
-
-	public Transform GetBoardHolder() {
-		return boardHolder;
-	}
-
+		
 	public void SetupScene(int level)
 	{
 		InitialiseList();
