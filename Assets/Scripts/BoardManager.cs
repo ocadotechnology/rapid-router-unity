@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Road;
 using Zenject;
-
+using DG.Tweening;
 
 public enum Direction : int
 {
@@ -42,14 +42,15 @@ public class BoardManager : MonoBehaviour, IInitializable
 
     public static Level currentLevel;
 
-
     [Inject]
-    Installer.Settings.FloorTiles tiles;
+	Installer.Settings.FloorTiles floorTiles;
+	[Inject]
+	Installer.Settings.RoadTiles roadTiles;
 
     [Inject]
     RoadDrawer roadDrawer;
 
-    private Transform boardHolder;
+    private static Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
 
     [Inject]
@@ -64,6 +65,21 @@ public class BoardManager : MonoBehaviour, IInitializable
         rows = mapDimensions.rows;
         columns = mapDimensions.columns;
     }
+
+	public Transform GetBoardHolder() {
+		return boardHolder;
+	}
+
+	public void SetupScene(int level)
+	{
+		InitialiseList();
+		GameObject currentBoard = GameObject.Find ("Board");
+		if (currentBoard != null) {
+			GameObject.DestroyObject (currentBoard);
+		}
+		boardHolder = new GameObject("Board").transform;
+		SetupLevel(level);
+	}
 
     void InitialiseList()
     {
@@ -80,37 +96,77 @@ public class BoardManager : MonoBehaviour, IInitializable
     private void SetupLevel(int levelNumber)
     {
         currentLevel = LevelReader.ReadLevelFromFile(levelNumber);
+
         SetupBoard();
-        roadDrawer.SetupOrigin(currentLevel.origin);
-        GameObject[] roadObjects = roadDrawer.SetupRoadSegments(currentLevel.path);
-        roadDrawer.SetupDestinations(currentLevel.destinationCoords);
-        foreach (GameObject roadObject in roadObjects)
-        {
-            roadObject.isStatic = true;
-            roadObject.transform.SetParent(boardHolder);
-        }
+		SetupRoute ();
+		SetupVan ();
     }
 
-    private void SetupBoard()
-    {
-        for (int x = 0; x < columns; x++)
-        {
-            for (int y = 0; y < rows; y++)
-            {
-                GameObject grassObject = Instantiate(tiles.grassTile, new Vector3(translator.translateRow(x), translator.translateColumn(y), 0f), Quaternion.identity) as GameObject;
-                grassObject.isStatic = true;
-                grassObject.transform.SetParent(boardHolder);
-            }
-        }
-    }
+	private void SetupBoard()
+	{
+		for (int x = 0; x < columns; x++)
+		{
+			for (int y = 0; y < rows; y++)
+			{
+				SetStaticWithBoardAsParent(
+					Instantiate(floorTiles.grassTile, 
+								new Vector3(translator.translateRow(x), translator.translateColumn(y), 0f),
+								Quaternion.identity) as GameObject);
+			}
+		}
+	}
 
-    public void SetupScene(int level)
-    {
-        InitialiseList();
-        boardHolder = new GameObject("Board").transform;
-        SetupLevel(level);
-    }
+	private void SetupRoute() {
+		GameObject cfcOrigin = SetupOrigin (currentLevel.origin);
+		GameObject[] roadObjects = roadDrawer.SetupRoadSegments(currentLevel.path);
+		GameObject homeDestination = SetupDestinations(currentLevel.destinationCoords);
 
+		List<GameObject> roadObjectsList = new List<GameObject>(roadObjects);
+		roadObjectsList.Add (cfcOrigin);
+		roadObjectsList.Add (homeDestination);
+		foreach (GameObject roadObject in roadObjectsList) {
+			SetStaticWithBoardAsParent (roadObject);
+		}
+	}
+
+	private GameObject SetupOrigin(OriginNode origin)
+	{
+		Direction direction = RoadDrawer.StringToDirection(origin.direction);
+		Coordinate coords = origin.coords;
+		return Instantiate(roadTiles.cfcTile, new Vector3(translator.translateRow(coords.x), translator.translateColumn(coords.y), 0f),
+			Quaternion.Euler(0, 0, (float)direction)) as GameObject;
+	}
+
+	private GameObject SetupDestinations(Coordinate[] destinationNodes)
+	{
+		return new GameObject ();
+	}
+		
+	private void SetupVan() 
+	{
+		GameObject van = GameObject.Find ("Van");
+		van.transform.position = translator.translateVector(currentLevel.origin.coords.vector);
+		int direction = (int)RoadDrawer.StringToDirection(currentLevel.origin.direction);
+
+		van.transform.rotation = Quaternion.identity;
+		van.transform.Rotate(new Vector3(0, 0, direction));
+		van.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+		van.transform.position += VehicleMover.ForwardABit(van.transform, 0.5f);
+		DOTween.defaultEaseOvershootOrAmplitude = 0;
+
+		BoardManager.SetBoardAsParent (van);
+	}
+
+	private static void SetStaticWithBoardAsParent(GameObject childObject) {
+		SetStatic (childObject);
+		SetBoardAsParent (childObject);
+	}
+
+	private static void SetStatic(GameObject staticObject) {
+		staticObject.isStatic = true;
+	}
+
+	public static void SetBoardAsParent(GameObject childObject) {
+		childObject.transform.SetParent(boardHolder);
+	}
 }
-
-
