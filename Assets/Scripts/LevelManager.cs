@@ -24,6 +24,7 @@ public class LevelManager : MonoBehaviour
 			items.Add ("Level " + i);
 		}
 		dropdown.AddOptions (items);
+		dropdown.captionText.alignment = TextAnchor.MiddleCenter;
 	}
 
 	public void Level_Change(int levelSelectIndex) {
