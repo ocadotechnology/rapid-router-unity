@@ -6,13 +6,11 @@ public class GameManager: IInitializable {
 
 	[Inject]
 	BoardManager boardScript;
-
-	private int level = 40;
+	private static int level = 1;
 
 	[PostInject]
     public void Initialize()
     {
-		boardScript.SetupScene(level);
+		boardScript.SetupScene (level);
     }
-	
 }

@@ -24,6 +24,11 @@ namespace Tests
             //Assert
             //The object has a new name
             //        Assert.AreEqual(newGameObjectName, gameObject.name);
+
+			// Need to assert that:
+			//	CFC origin has been placed correctly
+			//	Destination node placed correctly
+			//	Tiles placed correctly and of right type
             Assert.IsTrue(true);
         }
     }
