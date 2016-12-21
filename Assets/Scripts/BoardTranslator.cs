@@ -14,8 +14,6 @@ public class BoardTranslator
         this.mapDimensions = mapDimensions;
         halfRows = mapDimensions.rows / 2f;
         halfColumns = mapDimensions.columns / 2f;
-        Debug.Log("halfRows: " + halfRows);
-        Debug.Log("halfColumns: " + halfColumns);
     }
     
     public float translateRow(float x, bool drawingMap = false)
