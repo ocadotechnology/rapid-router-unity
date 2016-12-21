@@ -22,19 +22,6 @@ namespace Road
         [Inject]
         Installer.Settings.RoadTiles tiles;
 
-        public GameObject SetupOrigin(OriginNode origin)
-        {
-            Direction direction = StringToDirection(origin.direction);
-            Coordinate coords = origin.coords;
-            return Instantiate(tiles.cfcTile, new Vector3(translator.translateRow(coords.x), translator.translateColumn(coords.y), 0f),
-            Quaternion.Euler(0, 0, (float)direction)) as GameObject;
-        }
-
-        public void SetupDestinations(Coordinate[] destinationNodes)
-        {
-
-        }
-
         public GameObject[] SetupRoadSegments(PathNode[] nodes)
         {
             GameObject[] gameObjects = new GameObject[nodes.Length];

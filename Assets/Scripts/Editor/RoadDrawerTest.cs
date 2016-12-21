@@ -40,23 +40,7 @@ namespace Tests
         }
 
         [Test]
-        public void SetupOriginTest() {
-
-            var originNode = new OriginNode();
-            originNode.coordinate = new int[2] { 10, 3 };
-            originNode.direction = "E";
-            var roadDrawer = _container.Resolve<RoadDrawer>();
-            var originGameObject = roadDrawer.SetupOrigin(originNode);
-
-            Assert.AreEqual("CFC(Clone)", originGameObject.name);
-            Assert.AreEqual(new Vector3(10, 3, 0), originGameObject.transform.position);
-        }
-
-        [Test]
         public void SmallestRoadTest() {
-            var originNode = new OriginNode();
-            originNode.coordinate = new int[2] { 0, 0 };
-            originNode.direction = "E";
             var nodes = SetupPathNodesWithCoordinates(new int[2][] { new int[2] { 0, 0 }, new int[2] { 1, 0 } });
             nodes[0].connectedNodes = new int[] { 1 };
             nodes[1].connectedNodes = new int[] { 0 };
@@ -70,7 +54,6 @@ namespace Tests
         [Test]
         public void StraightRoadTest()
         {
-            OriginNode origin = SetupOriginNode("E", new int[2] { 0, 0 });
             PathNode[] nodes = SetupPathNodesWithCoordinates(new int[][] { new int[2] { 0, 0 }, new int[2] { 1, 0 }, new int[2] { 2, 0 }, new int[2] { 3, 0 } });
             nodes[0].connectedNodes = new int[] { 1 };
             nodes[1].connectedNodes = new int[] { 0, 2 };
@@ -88,7 +71,6 @@ namespace Tests
         [Test]
         public void TurnLeftRoadTest()
         {
-            OriginNode origin = SetupOriginNode("E", new int[2] { 0, 3 });
             PathNode[] nodes = SetupPathNodesWithCoordinates(new int[][] { new int[2] { 0, 3 }, new int[2] { 1, 3 }, new int[2] { 1, 4 }, new int[2] { 1, 5 } });
             nodes[0].connectedNodes = new int[] { 1 };
             nodes[1].connectedNodes = new int[] { 0, 2 };
@@ -106,7 +88,6 @@ namespace Tests
         [Test]
         public void TurnRightRoadTest()
         {
-            OriginNode origin = SetupOriginNode("E", new int[2] { 0, 3 });
             PathNode[] nodes = SetupPathNodesWithCoordinates(new int[][] { new int[2] { 0, 3 }, new int[2] { 1, 3 }, new int[2] { 1, 2 }, new int[2] { 1, 1 } });
             nodes[0].connectedNodes = new int[] { 1 };
             nodes[1].connectedNodes = new int[] { 0, 2 };
@@ -123,7 +104,6 @@ namespace Tests
 
         [Test]
         public void TJunctionRoadTest() {
-            OriginNode origin = SetupOriginNode("E", new int[2] { 0, 3 });
             PathNode[] nodes = SetupPathNodesWithCoordinates(new int[][] { new int[2] { 0, 3 }, new int[2] { 1, 3 }, new int[2] { 1, 4 }, new int[2] { 1, 2 } });
             nodes[0].connectedNodes = new int[] { 1 };
             nodes[1].connectedNodes = new int[] { 0, 2, 3 };
@@ -140,7 +120,6 @@ namespace Tests
 
         [Test]
         public void CrossRoadTest() {
-            OriginNode origin = SetupOriginNode("E", new int[2] { 0, 3 });
             PathNode[] nodes = SetupPathNodesWithCoordinates(new int[][] { new int[2] { 0, 3 }, new int[2] { 1, 3 }, new int[2] { 1, 4 }, new int[2] { 1, 2 }, new int[] { 2, 3 } });
             nodes[0].connectedNodes = new int[] { 1 };
             nodes[1].connectedNodes = new int[] { 0, 2, 3, 4 };
