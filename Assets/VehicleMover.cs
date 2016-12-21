@@ -7,27 +7,14 @@ using UnityEngine.UI;
 
 public class VehicleMover : MonoBehaviour
 {
-    GameObject van;
+    public GameObject van;
 
     bool vanMoving = false;
-
-    Level level;
 
     [Inject]
     BoardTranslator translator;
 
     int step = 0;
-
-    void Start()
-    {
-        van = GameObject.Find("Van");
-        this.level = BoardManager.currentLevel;
-        van.transform.position = translator.translateVector(level.origin.coords.vector);
-        van.transform.Rotate(new Vector3(0, 0, (int)RoadDrawer.StringToDirection(level.origin.direction)));
-        van.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-        van.transform.position += ForwardABit(van.transform, 0.5f);
-        DOTween.defaultEaseOvershootOrAmplitude = 0;
-    }
 
     // Update is called once per frame
     void Update()
@@ -156,14 +143,14 @@ public class VehicleMover : MonoBehaviour
         return vector;
     }
 
-    private Vector3 ForwardABit(Transform transform, float scalingFactor)
+	public static Vector3 ForwardABit(Transform transform, float scalingFactor)
     {
         var vector = ForwardOne(transform);
         vector.Scale(new Vector3(scalingFactor, scalingFactor, scalingFactor));
         return vector;
     }
 
-    private Vector3 ForwardOne(Transform transform)
+	private static Vector3 ForwardOne(Transform transform)
     {
         float degrees = transform.rotation.eulerAngles.z;
         var vector = new Vector3(-Mathf.Sin(Mathf.Deg2Rad * degrees), Mathf.Cos(Mathf.Deg2Rad * degrees));

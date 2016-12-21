@@ -38,6 +38,8 @@ public class Installer : MonoInstaller
         public class MapSettings {
             public int rows;
             public int columns;
+            public int horizontalOffset;
+            public int verticalOffset;
         }        
 
         [Serializable]
