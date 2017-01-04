@@ -51,7 +51,6 @@ public class BoardManager : MonoBehaviour, IInitializable
     RoadDrawer roadDrawer;
 
     private static Transform boardHolder;
-    private List<Vector3> gridPositions = new List<Vector3>();
 
     [Inject]
     BoardTranslator translator;
@@ -61,14 +60,12 @@ public class BoardManager : MonoBehaviour, IInitializable
 
     [PostInject]
     public void Initialize() {
-        gridPositions = new List<Vector3>();
         rows = mapDimensions.rows;
         columns = mapDimensions.columns;
     }
 		
 	public void SetupScene(int level)
 	{
-		InitialiseList();
 		GameObject currentBoard = GameObject.Find ("Board");
 		if (currentBoard != null) {
 			GameObject.DestroyObject (currentBoard);
@@ -76,18 +73,6 @@ public class BoardManager : MonoBehaviour, IInitializable
 		boardHolder = new GameObject("Board").transform;
 		SetupLevel(level);
 	}
-
-    void InitialiseList()
-    {
-        gridPositions.Clear();
-        for (int x = 0; x < columns; x++)
-        {
-            for (int y = 0; y < rows; y++)
-            {
-                gridPositions.Add(new Vector3(x, y, 0f));
-            }
-        }
-    }
 
     private void SetupLevel(int levelNumber)
     {
@@ -106,7 +91,7 @@ public class BoardManager : MonoBehaviour, IInitializable
 			{
 				SetStaticWithBoardAsParent(
 					Instantiate(floorTiles.grassTile, 
-								new Vector3(translator.translateRow(x), translator.translateColumn(y), 0f),
+								new Vector3(translator.translateRow(x, true), translator.translateColumn(y, true), 0f),
 								Quaternion.identity) as GameObject);
 			}
 		}

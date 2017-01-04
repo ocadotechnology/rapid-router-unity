@@ -16,14 +16,20 @@ public class BoardTranslator
         halfColumns = mapDimensions.columns / 2f;
     }
     
-    public float translateRow(float x)
+    public float translateRow(float x, bool drawingMap = false)
     {
-        return x - halfRows;
+        if (drawingMap == true) {
+            return x - halfColumns + mapDimensions.horizontalOffset;
+        }
+        return x;
     }
 
-    public float translateColumn(float y)
+    public float translateColumn(float y, bool drawingMap = false)
     {
-        return y - halfColumns;
+        if (drawingMap == true) {
+            return y - halfRows + mapDimensions.verticalOffset;
+        }
+        return y - (halfRows / 2f);
     }
 
     public Vector3 translateVector(Vector3 vector) {
