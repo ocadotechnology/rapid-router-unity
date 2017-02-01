@@ -1,11 +1,11 @@
 'use strict';
 
-var unirest = require('unirest');
-var fs = require('fs');
+let unirest = require('unirest');
+let fs = require('fs');
 
-var levels = [];
+let levels = [];
 unirest.get('https://www.codeforlife.education/rapidrouter/api/levels/?format=json').strictSSL(false).end((response) => {
-    for (var i = 0; i < response.body.length; i++) {
+    for (let i = 0; i < response.body.length; i++) {
         levels.push({ url: response.body[i].url, name: response.body[i].name });
     }
     downloadLevels(levels);
@@ -13,11 +13,11 @@ unirest.get('https://www.codeforlife.education/rapidrouter/api/levels/?format=js
 
 function downloadLevels(levels) {
     if (levels.length > 0) {
-        var level = levels.shift();
-        var url = level.url + 'map/?format=json'
+        let level = levels.shift();
+        let url = level.url + 'map/?format=json'
         unirest.get(url).strictSSL(false).end((res) => {
             if (res.body) {
-            	var levelData = processLevel(res.body);
+            	let levelData = processLevel(res.body);
                 writeLevelToFile(level.name, levelData, () => {
                     downloadLevels(levels);
                 });

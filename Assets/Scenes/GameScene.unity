@@ -269,6 +269,11 @@ MonoBehaviour:
       cfcTile: {fileID: 180496, guid: 7230cf8782d4549ca98e9b7072835f88, type: 2}
     floorTiles:
       grassTile: {fileID: 146650, guid: 2ac98e935a4924a68bd25a4916f04a7a, type: 2}
+    decorationTiles:
+      tree1Tile: {fileID: 146650, guid: fc1dc82a093bc4bed8c07e25951d9b24, type: 2}
+      tree2Tile: {fileID: 146650, guid: 9e61541fa908a46749b3fd2684ec5c29, type: 2}
+      bushTile: {fileID: 146650, guid: effccfb1ef4d7400a8b5485125cafcbe, type: 2}
+      pondTile: {fileID: 146650, guid: 80f968de235ae4029ad37914d4ec5695, type: 2}
 --- !u!114 &166703278
 MonoBehaviour:
   m_ObjectHideFlags: 0
