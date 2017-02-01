@@ -10,8 +10,8 @@ PlayerSettings:
   targetDevice: 1
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: 2013_10 - Sample Assets
+  companyName: Ocado Innovation Limited
+  productName: Rapid Router
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenStyle: 0
@@ -95,7 +95,7 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleIdentifier: education.codeforlife.rapid-router
-  bundleVersion: 0.2
+  bundleVersion: 0.3
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
   xboxOneDisableKinectGpuReservation: 0
