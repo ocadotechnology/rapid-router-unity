@@ -33,6 +33,14 @@ public class Level
             return coordinates;
         }
     }
+
+    public LevelDecor[] leveldecor_set;
+}
+
+public class LevelDecor {
+    public int x;
+    public int y;
+    public String decorName;
 }
 
 public class BoardManager : MonoBehaviour, IInitializable
@@ -49,6 +57,9 @@ public class BoardManager : MonoBehaviour, IInitializable
 
     [Inject]
     RoadDrawer roadDrawer;
+
+    [Inject]
+    DecorDrawer decorDrawer;
 
     private static Transform boardHolder;
 
@@ -80,7 +91,8 @@ public class BoardManager : MonoBehaviour, IInitializable
 
         SetupBoard();
 		SetupRoute ();
-		SetupVan ();
+        SetupDecorations();
+        SetupVan ();
     }
 
 	private void SetupBoard()
@@ -122,6 +134,13 @@ public class BoardManager : MonoBehaviour, IInitializable
 	{
 		return new GameObject ();
 	}
+
+	private void SetupDecorations() {
+        GameObject[] decorations = decorDrawer.SetupDecorations(currentLevel.leveldecor_set);
+		foreach (GameObject decorObject in decorations) {
+            SetStaticWithBoardAsParent(decorObject);
+        }
+    }
 		
 	private void SetupVan() 
 	{
