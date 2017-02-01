@@ -21,7 +21,7 @@ public class BoardTranslator
         if (drawingMap == true) {
             return x - halfColumns + mapDimensions.horizontalOffset;
         }
-        return x;
+        return x - (halfColumns - 2f);
     }
 
     public float translateColumn(float y, bool drawingMap = false)
