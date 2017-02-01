@@ -15,6 +15,7 @@ public class Installer : MonoInstaller
         Container.Bind<BoardManager>().ToSingleGameObject();
         Container.Bind<BoardTranslator>().ToSingle();
         Container.Bind<RoadDrawer>().ToSingleGameObject();
+        Container.Bind<DecorDrawer>().ToSingleGameObject();
         InstallSettings();
     }
     
@@ -22,6 +23,7 @@ public class Installer : MonoInstaller
         Container.Bind<Settings.RoadTiles>().ToSingleInstance(_settings.roadTiles);
         Container.Bind<Settings.FloorTiles>().ToSingleInstance(_settings.floorTiles);
         Container.Bind<Settings.MapSettings>().ToSingleInstance(_settings.mapSettings);
+        Container.Bind<Settings.DecorationTiles>().ToSingleInstance(_settings.decorationTiles);
     }
 
     [Serializable]
@@ -33,7 +35,9 @@ public class Installer : MonoInstaller
         public RoadTiles roadTiles;
 
         public FloorTiles floorTiles;
-        
+
+        public DecorationTiles decorationTiles;
+
         [Serializable]
         public class MapSettings {
             public int rows;
@@ -56,6 +60,14 @@ public class Installer : MonoInstaller
         [Serializable]
         public class FloorTiles {
             public GameObject grassTile;
+        }
+
+        [Serializable]
+        public class DecorationTiles {
+            public GameObject tree1Tile;
+            public GameObject tree2Tile;
+            public GameObject bushTile;
+            public GameObject pondTile;
         }
     }
 }
