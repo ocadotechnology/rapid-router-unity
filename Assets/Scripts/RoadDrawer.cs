@@ -55,8 +55,8 @@ namespace Road
         {
             PathNode connectedNode = nodes[node.connectedNodes[0]];
             Direction direction = RelativeDirection(node, connectedNode);
-            float x = translator.translateRow(node.coords.x);
-            float y = translator.translateColumn(node.coords.y);
+            float x = translator.translateToSceneRow(node.coords.x);
+            float y = translator.translateToSceneColumn(node.coords.y);
             return Instantiate(tiles.deadEndRoadTile, new Vector3(x, y, 0f),
                 Quaternion.Euler(0, 0, (float)direction)) as GameObject;
         }
@@ -79,16 +79,16 @@ namespace Road
 
         public GameObject DrawStraightSegment(PathNode node, Direction direction)
         {
-            float x = translator.translateRow(node.coords.x);
-            float y = translator.translateColumn(node.coords.y);
+            float x = translator.translateToSceneRow(node.coords.x);
+            float y = translator.translateToSceneColumn(node.coords.y);
             return Instantiate(tiles.straightRoadTile, new Vector3(x, y, 0f),
                 Quaternion.Euler(0, 0, (float)direction)) as GameObject;
         }
 
         public GameObject DrawTurnSegment(PathNode node, Direction direction1, Direction direction2)
         {
-            float x = translator.translateRow(node.coords.x);
-            float y = translator.translateColumn(node.coords.y);
+            float x = translator.translateToSceneRow(node.coords.x);
+            float y = translator.translateToSceneColumn(node.coords.y);
             float rotationAngle = GetRotationAngleForTurnRoad(direction1, direction2);
             return Instantiate(tiles.turnRoadTile, new Vector3(x, y, 0f),
             Quaternion.Euler(0, 0, rotationAngle)) as GameObject;
@@ -121,8 +121,8 @@ namespace Road
 
         public GameObject DrawTJunctionSegment(PathNode[] nodes, PathNode node)
         {
-            float x = translator.translateRow(node.coords.x);
-            float y = translator.translateColumn(node.coords.y);
+            float x = translator.translateToSceneRow(node.coords.x);
+            float y = translator.translateToSceneColumn(node.coords.y);
             Direction direction1 = RelativeDirection(node, nodes[node.connectedNodes[0]]);
             Direction direction2 = RelativeDirection(node, nodes[node.connectedNodes[1]]);
             Direction direction3 = RelativeDirection(node, nodes[node.connectedNodes[2]]);
@@ -157,8 +157,8 @@ namespace Road
 
         public GameObject DrawCrossRoadSegment(PathNode node)
         {
-            float x = translator.translateRow(node.coords.x);
-            float y = translator.translateColumn(node.coords.y);
+            float x = translator.translateToSceneRow(node.coords.x);
+            float y = translator.translateToSceneColumn(node.coords.y);
             return Instantiate(tiles.crossRoadTile, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
         }
 

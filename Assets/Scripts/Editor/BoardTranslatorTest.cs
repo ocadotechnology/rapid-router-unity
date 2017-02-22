@@ -16,8 +16,8 @@ namespace Tests
             mapSettings.columns = 10;
             var boardTranslator = new BoardTranslator(mapSettings);
 
-            Assert.AreEqual(2, boardTranslator.translateRow(6));
-            Assert.AreEqual(-4, boardTranslator.translateRow(0));
+            Assert.AreEqual(2, boardTranslator.translateToSceneRow(6));
+            Assert.AreEqual(-4, boardTranslator.translateToSceneRow(0));
         }
         
         [Test]
@@ -28,8 +28,8 @@ namespace Tests
             mapSettings.columns = 8;
             var boardTranslator = new BoardTranslator(mapSettings);
 
-            Assert.AreEqual(2, boardTranslator.translateColumn(6));
-            Assert.AreEqual(-4, boardTranslator.translateColumn(0));
+            Assert.AreEqual(2, boardTranslator.translateToSceneColumn(6));
+            Assert.AreEqual(-4, boardTranslator.translateToSceneColumn(0));
         }
     }
 }
