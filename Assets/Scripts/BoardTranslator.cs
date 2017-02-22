@@ -16,7 +16,7 @@ public class BoardTranslator
         halfColumns = mapDimensions.columns / 2f;
     }
     
-    public float translateRow(float x, bool drawingMap = false)
+    public float translateToSceneRow(float x, bool drawingMap = false)
     {
         if (drawingMap == true) {
             return x - halfColumns + mapDimensions.horizontalOffset;
@@ -24,7 +24,7 @@ public class BoardTranslator
         return x - (halfColumns - 2f);
     }
 
-    public float translateColumn(float y, bool drawingMap = false)
+    public float translateToSceneColumn(float y, bool drawingMap = false)
     {
         if (drawingMap == true) {
             return y - halfRows + mapDimensions.verticalOffset;
@@ -32,8 +32,12 @@ public class BoardTranslator
         return y - (halfRows / 2f);
     }
 
-    public Vector3 translateVector(Vector3 vector) {
-        return new Vector3(translateRow(vector.x), translateColumn(vector.y), 0);
+    public Vector3 translateToSceneVector(Vector3 gameVector) {
+        return new Vector3(translateToSceneRow(gameVector.x), translateToSceneColumn(gameVector.y), 0);
+    }
+
+    public Vector3 translateToGameVector(Vector3 sceneVector) {
+        return new Vector3(sceneVector.x + (halfColumns - 2f), sceneVector.y + (halfRows / 2f));
     }
 
 }

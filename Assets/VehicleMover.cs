@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using Zenject;
-using Road;
-using UnityEngine.UI;
 
 public class VehicleMover : MonoBehaviour
 {
+
+    enum Steering {
+        Forward, 
+        Left,
+        Right
+    }
     public GameObject van;
 
     bool vanMoving = false;
@@ -36,55 +41,82 @@ public class VehicleMover : MonoBehaviour
     public void StartLeft() {
         if (!vanMoving)
         {
-            StartCoroutine(Left(van.transform, 1));
+            StartCoroutine(Move(van.transform, 1, Steering.Left));
             step++;
         }
     }
 
     public void StartRight() {
         if (!vanMoving) {
-            StartCoroutine(Right(van.transform, 1));
+            StartCoroutine(Move(van.transform, 1, Steering.Right));
             step++;
         }
     }
 
     public void StartForward() {
         if (!vanMoving) {
-            StartCoroutine(Forward(van.transform, 1));
+            StartCoroutine(Move(van.transform, 1, Steering.Forward));
             step++;
         }
     }
 
-    private IEnumerator Left(Transform transform, float duration)
-    {
+    private IEnumerator Move(Transform transform, float duration, Steering direction) {
         vanMoving = true;
+        Sequence sequence = GetSequenceForDirection(transform, duration, direction);
+        sequence.Play();
+        yield return new WaitForSeconds(duration);
+        CheckIfAtDestination();
+        vanMoving = false;
+
+    }
+
+    private void CheckIfAtDestination()
+    {
+        Vector3 fowardOne = new Vector3(Mathf.Cos(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), -Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), 0);
+        Coordinate currentPosition = new Coordinate(translator.translateToGameVector(van.transform.position) + forwardOne);
+        HashSet<Coordinate> dests = BoardManager.currentLevel.destinationCoords;
+        if (dests.Contains(currentPosition)) {
+            print("You have reached your destination(s) (in a sat nav voice)");
+        }
+    }
+
+    private Sequence GetSequenceForDirection(Transform transform, float duration, Steering direction)
+    {
+        switch (direction)
+        {
+            case Steering.Forward:
+                return ForwardSequence(transform, duration);
+            case Steering.Left:
+                return LeftSequence(transform, duration);
+            case Steering.Right:
+                return RightSequence(transform, duration);
+            default:
+                return DOTween.Sequence();
+        }
+    }
+
+    private Sequence LeftSequence(Transform transform, float duration)
+    {
         Sequence sequence = DOTween.Sequence();
         sequence.Append(transform.DOPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForLeft(transform.rotation.eulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D).SetEase(Ease.InOutQuad).SetRelative());
         sequence.Join(transform.DORotateQuaternion(Quaternion.Euler(0, 0, 90), duration).SetEase(Ease.InOutCubic).SetRelative());
-        sequence.Play();
-        yield return new WaitForSeconds(duration);
-        vanMoving = false;
+        return sequence;
     }
 
-    private IEnumerator Right(Transform transform, float duration)
+    private Sequence RightSequence(Transform transform, float duration)
     {
-        vanMoving = true;
         Sequence sequence = DOTween.Sequence();
         sequence.Append(transform.DOPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForRight(transform.rotation.eulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D).SetEase(Ease.InOutQuad).SetRelative());
         sequence.Join(transform.DORotateQuaternion(Quaternion.Euler(0, 0, -90), duration).SetEase(Ease.InOutCubic).SetRelative());
-        sequence.Play();
-        yield return new WaitForSeconds(duration);
-        vanMoving = false;
+        return sequence;
     }
 
-    private IEnumerator Forward(Transform transform, float duration)
+    private Sequence ForwardSequence(Transform transform, float duration)
     {
-        vanMoving = true;
-        print(transform.rotation.eulerAngles);
+        Sequence sequence = DOTween.Sequence();
         var newDirection = new Vector3(-Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), Mathf.Cos(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), 0);
-        transform.DOMove(newDirection, duration).SetRelative();
-        yield return new WaitForSeconds(duration);
-        vanMoving = false;
+        sequence.Append(transform.DOMove(newDirection, duration).SetRelative());
+        return sequence;
     }
 
     Vector3 Deg2LocForLeft(float degrees)
