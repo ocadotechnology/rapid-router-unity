@@ -28,4 +28,14 @@ public class Coordinate: IEquatable<Coordinate>
     {
         return this.x == other.x && this.y == other.y;
     }
+
+    public override int GetHashCode() {
+        return this.x * 100 + y;
+    }
+
+    
+    override public String ToString()
+    {
+        return "x: " + this.x + ", y: " + this.y;
+    }
 }

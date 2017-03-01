@@ -27,8 +27,8 @@ public class DecorDrawer : MonoBehaviour
             tile = null;
             if (nameToTile.TryGetValue(decoration.decorName, out tile))
             {
-                float row = translator.translateRow(decoration.x / 100f, false);
-                float column = translator.translateColumn(decoration.y / 100f, false);
+                float row = translator.translateToSceneRow(decoration.x / 100f, false);
+                float column = translator.translateToSceneColumn(decoration.y / 100f, false);
                 decorationObjects[currentIndex] = Instantiate(tile,
                                     new Vector3(row, column, 0f),
                                     Quaternion.identity) as GameObject;
