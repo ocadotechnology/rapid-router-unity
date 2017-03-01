@@ -72,7 +72,7 @@ public class VehicleMover : MonoBehaviour
 
     private void CheckIfAtDestination()
     {
-        Vector3 fowardOne = new Vector3(Mathf.Cos(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), -Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), 0);
+        Vector3 forwardOne = new Vector3(Mathf.Cos(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), -Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), 0);
         Coordinate currentPosition = new Coordinate(translator.translateToGameVector(van.transform.position) + forwardOne);
         HashSet<Coordinate> dests = BoardManager.currentLevel.destinationCoords;
         if (dests.Contains(currentPosition)) {
