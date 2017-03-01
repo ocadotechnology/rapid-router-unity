@@ -19,20 +19,17 @@ public class Level
     public OriginNode origin;
 
     public int[][] destinations;
-    
-    public Coordinate[] destinationCoords
-    {
-        get
-        {
-            Coordinate[] coordinates = new Coordinate[destinations.Length];
-            for (int i = 0; i < destinations.Length; i++)
-            {
+
+    public HashSet<Coordinate> destinationCoords {
+		get {
+            HashSet<Coordinate> coordinates = new HashSet<Coordinate>();
+            for (int i = 0; i < destinations.Length; i++) {
                 int[] dest = destinations[i];
-                coordinates[i] = new Coordinate(dest[0], dest[1]);
+                coordinates.Add(new Coordinate(dest[0], dest[1]));
             }
             return coordinates;
-        }
-    }
+		}
+	}
 
     public LevelDecor[] leveldecor_set;
 }
@@ -103,7 +100,7 @@ public class BoardManager : MonoBehaviour, IInitializable
 			{
 				SetStaticWithBoardAsParent(
 					Instantiate(floorTiles.grassTile, 
-								new Vector3(translator.translateRow(x, true), translator.translateColumn(y, true), 0f),
+								new Vector3(translator.translateToSceneRow(x, true), translator.translateToSceneColumn(y, true), 0f),
 								Quaternion.identity) as GameObject);
 			}
 		}
@@ -126,11 +123,11 @@ public class BoardManager : MonoBehaviour, IInitializable
 	{
 		Direction direction = RoadDrawer.StringToDirection(origin.direction);
 		Coordinate coords = origin.coords;
-		return Instantiate(roadTiles.cfcTile, new Vector3(translator.translateRow(coords.x), translator.translateColumn(coords.y), 0f),
+		return Instantiate(roadTiles.cfcTile, new Vector3(translator.translateToSceneRow(coords.x), translator.translateToSceneColumn(coords.y), 0f),
 			Quaternion.Euler(0, 0, (float)direction)) as GameObject;
 	}
 
-	private GameObject SetupDestinations(Coordinate[] destinationNodes)
+	private GameObject SetupDestinations(HashSet<Coordinate> destinationNodes)
 	{
 		return new GameObject ();
 	}
@@ -145,7 +142,7 @@ public class BoardManager : MonoBehaviour, IInitializable
 	private void SetupVan() 
 	{
 		GameObject van = GameObject.Find ("Van");
-		van.transform.position = translator.translateVector(currentLevel.origin.coords.vector);
+		van.transform.position = translator.translateToSceneVector(currentLevel.origin.coords.vector);
 		int direction = (int)RoadDrawer.StringToDirection(currentLevel.origin.direction);
 
 		van.transform.rotation = Quaternion.identity;
