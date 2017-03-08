@@ -19,7 +19,7 @@ public class BoardTranslator
     public float translateToSceneRow(float x, bool drawingMap = false)
     {
         if (drawingMap == true) {
-            return x - halfColumns + mapDimensions.horizontalOffset;
+            return x - halfColumns;
         }
         return x - (halfColumns - 2f);
     }
@@ -27,7 +27,7 @@ public class BoardTranslator
     public float translateToSceneColumn(float y, bool drawingMap = false)
     {
         if (drawingMap == true) {
-            return y - halfRows + mapDimensions.verticalOffset;
+            return y - halfRows;
         }
         return y - (halfRows / 2f);
     }
