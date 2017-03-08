@@ -65,14 +65,25 @@ public class VehicleMover : MonoBehaviour
         Sequence sequence = GetSequenceForDirection(transform, duration, direction);
         sequence.Play();
         yield return new WaitForSeconds(duration);
+        CheckIfOffRoading();
         CheckIfAtDestination();
         vanMoving = false;
+    }
 
+    private void CheckIfOffRoading() {
+        Coordinate vanCoord = new Coordinate(van.transform.position);
+        print("Van:" + vanCoord);
+        if (!BoardManager.roadCoordinates.Contains(vanCoord)) {
+            print("BOOM!");
+        }
     }
 
     private void CheckIfAtDestination()
     {
-        Vector3 forwardOne = new Vector3(Mathf.Cos(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), -Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), 0);
+        float rotation = van.transform.rotation.eulerAngles.z;
+        float xTransform =  Mathf.Cos(Mathf.Deg2Rad * rotation);
+        float yTransform = -Mathf.Sin(Mathf.Deg2Rad * rotation);
+        Vector3 forwardOne = new Vector3(xTransform, yTransform, 0);
         Coordinate currentPosition = new Coordinate(translator.translateToGameVector(van.transform.position) + forwardOne);
         HashSet<Coordinate> dests = BoardManager.currentLevel.destinationCoords;
         if (dests.Contains(currentPosition)) {
