@@ -114,7 +114,6 @@ public class BoardManager : MonoBehaviour, IInitializable
 		GameObject[] roadObjects = roadDrawer.SetupRoadSegments(currentLevel.path);
 		foreach (GameObject roadObject in roadObjects) {
 			Coordinate currCoord = new Coordinate(roadObject.transform.position);
-			print(currCoord);
 			roadCoordinates.Add(currCoord);
 		}
 
