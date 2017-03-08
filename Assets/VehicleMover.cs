@@ -65,14 +65,14 @@ public class VehicleMover : MonoBehaviour
         Sequence sequence = GetSequenceForDirection(transform, duration, direction);
         sequence.Play();
         yield return new WaitForSeconds(duration);
-        CheckIfOffRoading();
+        CheckIfOffRoading(direction);
         CheckIfAtDestination();
         vanMoving = false;
     }
 
-    private void CheckIfOffRoading() {
-        Coordinate vanCoord = new Coordinate(van.transform.position);
-        print("Van:" + vanCoord);
+    private void CheckIfOffRoading(Steering direction) {
+        Vector3 vanPosition = van.transform.position + ForwardABit(van.transform, 0.5f);
+        Coordinate vanCoord = new Coordinate(vanPosition);
         if (!BoardManager.roadCoordinates.Contains(vanCoord)) {
             print("BOOM!");
         }
