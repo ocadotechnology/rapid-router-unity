@@ -80,13 +80,10 @@ public class VehicleMover : MonoBehaviour
 
     private void CheckIfAtDestination()
     {
-        float rotation = van.transform.rotation.eulerAngles.z;
-        float xTransform =  Mathf.Cos(Mathf.Deg2Rad * rotation);
-        float yTransform = -Mathf.Sin(Mathf.Deg2Rad * rotation);
-        Vector3 forwardOne = new Vector3(xTransform, yTransform, 0);
-        Coordinate currentPosition = new Coordinate(translator.translateToGameVector(van.transform.position) + forwardOne);
+        Vector3 vanPosition = van.transform.position + ForwardABit(van.transform, 0.5f);
+        Coordinate vanCoord = new Coordinate(translator.translateToGameVector(vanPosition));
         HashSet<Coordinate> dests = BoardManager.currentLevel.destinationCoords;
-        if (dests.Contains(currentPosition)) {
+        if (dests.Contains(vanCoord)) {
             print("You have reached your destination(s) (in a sat nav voice)");
         }
     }
