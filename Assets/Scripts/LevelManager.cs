@@ -19,10 +19,13 @@ public class LevelManager : MonoBehaviour
 	}
 
 	void PopulateList() {
-		int levelCount = Directory.GetFiles("Assets/Resources/Levels", "*.json").Length;
+		UnityEngine.Object[] levels = Resources.LoadAll("Levels");
+		int levelCount = levels.Length;
 		for (int i = 1; i <= levelCount; i++) {
 			items.Add ("Level " + i);
+			Resources.UnloadAsset((UnityEngine.Object) levels.GetValue(i - 1));
 		}
+		
 		dropdown.AddOptions (items);
 		dropdown.captionText.alignment = TextAnchor.MiddleCenter;
 	}
