@@ -65,17 +65,25 @@ public class VehicleMover : MonoBehaviour
         Sequence sequence = GetSequenceForDirection(transform, duration, direction);
         sequence.Play();
         yield return new WaitForSeconds(duration);
+        CheckIfOffRoading(direction);
         CheckIfAtDestination();
         vanMoving = false;
+    }
 
+    private void CheckIfOffRoading(Steering direction) {
+        Vector3 vanPosition = van.transform.position + ForwardABit(van.transform, 0.5f);
+        Coordinate vanCoord = new Coordinate(vanPosition);
+        if (!BoardManager.roadCoordinates.Contains(vanCoord)) {
+            print("BOOM!");
+        }
     }
 
     private void CheckIfAtDestination()
     {
-        Vector3 forwardOne = new Vector3(Mathf.Cos(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), -Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), 0);
-        Coordinate currentPosition = new Coordinate(translator.translateToGameVector(van.transform.position) + forwardOne);
+        Vector3 vanPosition = van.transform.position + ForwardABit(van.transform, 0.5f);
+        Coordinate vanCoord = new Coordinate(translator.translateToGameVector(vanPosition));
         HashSet<Coordinate> dests = BoardManager.currentLevel.destinationCoords;
-        if (dests.Contains(currentPosition)) {
+        if (dests.Contains(vanCoord)) {
             print("You have reached your destination(s) (in a sat nav voice)");
         }
     }
