@@ -2400,6 +2400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   van: {fileID: 1140445869}
+  explosion: {fileID: 100000, guid: bf495eacf58e31146ab012aa89ac68da, type: 2}
 --- !u!1 &1965257322
 GameObject:
   m_ObjectHideFlags: 0
