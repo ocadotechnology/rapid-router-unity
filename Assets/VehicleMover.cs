@@ -6,18 +6,18 @@ using Zenject;
 
 public class VehicleMover : MonoBehaviour
 {
-
     enum Steering {
         Forward, 
         Left,
         Right
     }
     public GameObject van;
-
     bool vanMoving = false;
 
     [Inject]
     BoardTranslator translator;
+
+    public GameObject explosion;
 
     int step = 0;
 
@@ -74,7 +74,9 @@ public class VehicleMover : MonoBehaviour
         Vector3 vanPosition = van.transform.position + ForwardABit(van.transform, 0.5f);
         Coordinate vanCoord = new Coordinate(vanPosition);
         if (!BoardManager.roadCoordinates.Contains(vanCoord)) {
-            print("BOOM!");
+            Instantiate(explosion, van.transform.position, Quaternion.identity);
+            Destroy(explosion, 5f);
+            van.GetComponent<SpriteRenderer>().DOColor(Color.black, 4f);
         }
     }
 
