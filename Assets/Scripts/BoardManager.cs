@@ -158,8 +158,9 @@ public class BoardManager : MonoBehaviour, IInitializable
 		van.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 		van.transform.position += VehicleMover.ForwardABit(van.transform, 0.5f);
 		DOTween.defaultEaseOvershootOrAmplitude = 0;
+        van.GetComponent<SpriteRenderer>().color = Color.white;
 
-		BoardManager.SetBoardAsParent (van);
+        BoardManager.SetBoardAsParent (van);
 	}
 
 	private static void SetStaticWithBoardAsParent(GameObject childObject) {
