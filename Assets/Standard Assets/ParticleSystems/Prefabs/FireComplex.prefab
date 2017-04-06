@@ -183,7 +183,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: -0.7071068, y: -0.000000003313394, z: -0.000000003313394, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -196,7 +196,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0.7071068, y: -0.000000011115432, z: -0.000000011115432, w: -0.7071068}
-  m_LocalPosition: {x: 0, y: 0.2, z: 0}
+  m_LocalPosition: {x: 0, y: -0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -3488,20 +3488,26 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 2
-          time: 0
-          value: 0.22972971
+          time: 0.0026737968
+          value: 0.37446654
           inSlope: 3.6576574
           outSlope: 3.6576574
           tangentMode: 0
         - serializedVersion: 2
-          time: 1
-          value: 0.39189196
+          time: 0.45694804
+          value: 0.6578947
+          inSlope: -0.04924394
+          outSlope: -0.04924394
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.9946524
+          value: 0.46426037
           inSlope: -2.9183426
           outSlope: -2.9183426
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
-        m_RotationOrder: 4
+        m_RotationOrder: 0
       minCurve:
         serializedVersion: 2
         m_Curve:
@@ -11226,7 +11232,7 @@ ParticleSystem:
   SizeModule:
     enabled: 1
     curve:
-      scalar: 2
+      scalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -12332,7 +12338,7 @@ ParticleSystem:
   SizeBySpeedModule:
     enabled: 0
     curve:
-      scalar: 1
+      scalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -13196,7 +13202,7 @@ ParticleSystem:
   m_GameObject: {fileID: 100016}
   serializedVersion: 5
   lengthInSec: 5
-  simulationSpeed: 1.5
+  simulationSpeed: 0.6
   looping: 1
   prewarm: 0
   playOnAwake: 1
@@ -13561,7 +13567,7 @@ ParticleSystem:
     size3D: 0
     rotation3D: 0
     gravityModifier:
-      scalar: -0.25
+      scalar: -0.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -13597,7 +13603,7 @@ ParticleSystem:
     serializedVersion: 3
     enabled: 1
     type: 1
-    radius: 0.33612645
+    radius: 0.2
     angle: 25
     length: 5
     boxX: 1
@@ -13614,7 +13620,7 @@ ParticleSystem:
     m_UseMeshMaterialIndex: 0
     m_UseMeshColors: 1
     alignToDirection: 0
-    randomDirectionAmount: 1
+    randomDirectionAmount: 0.75
     sphericalDirectionAmount: 0
   EmissionModule:
     enabled: 1
