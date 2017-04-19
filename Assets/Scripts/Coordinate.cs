@@ -4,18 +4,18 @@ using UnityEngine;
 [Serializable]
 public class Coordinate: IEquatable<Coordinate>
 {
-    public int x;
-    public int y;
+    public float x;
+    public float y;
 
-    public Coordinate(int x, int y)
+    public Coordinate(float x, float y)
     {
         this.x = x;
         this.y = y;
     }
 
     public Coordinate(Vector3 vector) {
-        this.x = (int)vector.x;
-        this.y = (int)vector.y;
+        this.x = (float)Math.Round(vector.x, 2);
+        this.y = (float)Math.Round(vector.y, 2);
     }
 
     public Vector3 vector {
@@ -30,7 +30,7 @@ public class Coordinate: IEquatable<Coordinate>
     }
 
     public override int GetHashCode() {
-        return this.x * 100 + y;
+        return (int)(this.x * 100 + this.y * 100);
     }
 
     
