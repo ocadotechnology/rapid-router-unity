@@ -74,8 +74,8 @@ public class VehicleMover : MonoBehaviour
         Vector3 vanPosition = van.transform.position + ForwardABit(van.transform, 0.5f);
         Coordinate vanCoord = new Coordinate(vanPosition);
         if (!BoardManager.roadCoordinates.Contains(vanCoord)) {
-            Instantiate(explosion, van.transform.position, Quaternion.identity);
-            Destroy(explosion, 5f);
+            var explosionInstance = Instantiate(explosion, van.transform.position, Quaternion.identity);
+            Destroy(explosionInstance, 5f);
             van.GetComponent<SpriteRenderer>().DOColor(Color.black, 4f);
         }
     }
