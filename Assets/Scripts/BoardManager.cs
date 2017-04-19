@@ -66,6 +66,8 @@ public class BoardManager : MonoBehaviour, IInitializable
     [Inject]
     Installer.Settings.MapSettings mapDimensions;
 
+	public static HashSet<Coordinate> roadCoordinates = new HashSet<Coordinate>();
+
     [PostInject]
     public void Initialize() {
         rows = mapDimensions.rows;
@@ -106,9 +108,15 @@ public class BoardManager : MonoBehaviour, IInitializable
 		}
 	}
 
-	private void SetupRoute() {
+	private void SetupRoute() 
+	{
 		GameObject cfcOrigin = SetupOrigin (currentLevel.origin);
 		GameObject[] roadObjects = roadDrawer.SetupRoadSegments(currentLevel.path);
+		foreach (GameObject roadObject in roadObjects) {
+			Coordinate currCoord = new Coordinate(roadObject.transform.position);
+			roadCoordinates.Add(currCoord);
+		}
+
 		GameObject homeDestination = SetupDestinations(currentLevel.destinationCoords);
 
 		List<GameObject> roadObjectsList = new List<GameObject>(roadObjects);
@@ -150,8 +158,9 @@ public class BoardManager : MonoBehaviour, IInitializable
 		van.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 		van.transform.position += VehicleMover.ForwardABit(van.transform, 0.5f);
 		DOTween.defaultEaseOvershootOrAmplitude = 0;
+        van.GetComponent<SpriteRenderer>().color = Color.white;
 
-		BoardManager.SetBoardAsParent (van);
+        BoardManager.SetBoardAsParent (van);
 	}
 
 	private static void SetStaticWithBoardAsParent(GameObject childObject) {
