@@ -1,0 +1,10 @@
+framework module Blockly {
+  umbrella header "Blockly.h"
+
+  export *
+  module * { export * }
+}
+
+module Blockly.Swift {
+    header "Blockly-Swift.h"
+}

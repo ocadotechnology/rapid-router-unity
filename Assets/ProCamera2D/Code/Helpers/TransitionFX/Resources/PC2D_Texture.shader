@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 // Adapted from a tutorial by https://twitter.com/DanielJMoran
 
 Shader "Hidden/ProCamera2D/TransitionsFX/Texture" 
@@ -38,7 +40,7 @@ Shader "Hidden/ProCamera2D/TransitionsFX/Texture"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = v.uv;
 				return o;
 			}
