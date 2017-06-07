@@ -15,7 +15,7 @@ public class LevelManager : MonoBehaviour
 	public Dropdown dropdown;
 
 	void Start() {
-		PopulateList ();
+		PopulateList();
 	}
 
 	void PopulateList() {
@@ -26,12 +26,16 @@ public class LevelManager : MonoBehaviour
 			Resources.UnloadAsset((UnityEngine.Object) levels.GetValue(i - 1));
 		}
 		
-		dropdown.AddOptions (items);
+		dropdown.AddOptions(items);
 		dropdown.captionText.alignment = TextAnchor.MiddleCenter;
 	}
 
+	public void LevelChangeListener(string newLevelIndex) {
+		LevelChange(int.Parse(newLevelIndex));
+	}
+
 	public void LevelChange(int levelSelectIndex) {
-		boardScript.SetupScene (levelSelectIndex + 1);
+		boardScript.SetupScene(levelSelectIndex + 1);
 	}
 }
 
