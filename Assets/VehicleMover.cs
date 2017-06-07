@@ -33,11 +33,11 @@ public class VehicleMover : MonoBehaviour
     }
 
 	public void BlocklyListener(string action) {
-		if (string.Equals(action, "forward")) {
+		if (string.Equals(action, "move_forward")) {
 			StartForward();
-		} else if (string.Equals(action, "left")) {
+		} else if (string.Equals(action, "turn_left")) {
 			StartLeft();
-		} else if (string.Equals(action, "right")) {
+		} else if (string.Equals(action, "turn_right")) {
 			StartRight();
 		}
 	}
