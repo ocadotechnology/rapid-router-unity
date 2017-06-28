@@ -22,21 +22,25 @@ public class VehicleMover : MonoBehaviour
     int step = 0;
 
     // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKey("up"))
-        {
+    void Update() {
+        if (Input.GetKey("up")) {
             StartForward();
-        }
-        else if (Input.GetKey("left"))
-        {
+        } else if (Input.GetKey("left")) {
             StartLeft();
-        }
-        else if (Input.GetKey("right"))
-        {
+        } else if (Input.GetKey("right")) {
             StartRight();
         }
     }
+
+	public void BlocklyListener(string action) {
+		if (string.Equals(action, "move_forwards")) {
+			StartForward();
+		} else if (string.Equals(action, "turn_left")) {
+			StartLeft();
+		} else if (string.Equals(action, "turn_right")) {
+			StartRight();
+		}
+	}
 
     public void StartLeft() {
         if (!vanMoving)
