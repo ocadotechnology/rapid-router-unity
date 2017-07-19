@@ -87,16 +87,6 @@ public class VehicleMover : MonoBehaviour
 		}
 	}
 
-	public void BlocklyListener(string action) {
-		if (string.Equals(action, "move_forwards")) {
-			StartForward();
-		} else if (string.Equals(action, "turn_left")) {
-			StartLeft();
-		} else if (string.Equals(action, "turn_right")) {
-			StartRight();
-		}
-	}
-
     public void StartLeft() {
         if (!vanMoving)
         {
