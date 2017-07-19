@@ -44,7 +44,7 @@ public class VehicleMover : MonoBehaviour
 		}
 	}
 
-	public void FollowInstruction(Instruction instruction) {
+	private void FollowInstruction(Instruction instruction) {
 		switch (instruction.Type) {
 		case Instruction.Types.Type.Call:
 			// TODO Call ();
