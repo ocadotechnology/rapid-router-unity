@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using DG.Tweening;
 using Zenject;
 
@@ -32,60 +31,6 @@ public class VehicleMover : MonoBehaviour
             StartRight();
         }
     }
-
-	public void Listener(string protobufInstructionsString) {
-		byte[] protobufInstructions = Encoding.Default.GetBytes (protobufInstructionsString);
-		Code code = Code.Parser.ParseFrom (protobufInstructions);
-		Google.Protobuf.Collections.RepeatedField<Method> methods = code.Methods;
-
-		foreach (Method method in methods) {
-			Google.Protobuf.Collections.RepeatedField<Instruction> instructions = method.Instructions;
-			foreach (Instruction instruction in instructions) {
-				FollowInstruction (instruction);
-			}
-		}
-	}
-
-	private void FollowInstruction(Instruction instruction) {
-		switch (instruction.Type) {
-		case Instruction.Types.Type.Call:
-			// TODO Call ();
-			break;
-		case Instruction.Types.Type.Deliver:
-			// TODO Deliver ();
-			break;
-		case Instruction.Types.Type.IfDo:
-			// TODO IfDo ();
-			break;
-		case Instruction.Types.Type.IfDoElse:
-			// TODO IfDoElse ();
-			break;
-		case Instruction.Types.Type.MoveForwards:
-			StartForward ();
-			break;
-		case Instruction.Types.Type.RepeatTimesDo:
-			// TODO RepeatTimesDo ();
-			break;
-		case Instruction.Types.Type.RepeatUntilDo:
-			// TODO RepeatUntilDo ();
-			break;
-		case Instruction.Types.Type.RepeatWhileDo:
-			// TODO RepeatWhileDo ();
-			break;
-		case Instruction.Types.Type.TurnAround:
-			// TODO TurnAround ();
-			break;
-		case Instruction.Types.Type.TurnLeft:
-			StartLeft ();
-			break;
-		case Instruction.Types.Type.TurnRight:
-			StartRight ();
-			break;
-		case Instruction.Types.Type.Wait:
-			// TODO Wait ();
-			break;
-		}
-	}
 
     public void StartLeft() {
         if (!vanMoving)
