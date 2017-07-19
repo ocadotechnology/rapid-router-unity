@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using DG.Tweening;
 using Zenject;
 
@@ -32,7 +33,8 @@ public class VehicleMover : MonoBehaviour
         }
     }
 
-	public void Listener(byte[] protobufInstructions) {
+	public void Listener(string protobufInstructionsString) {
+		byte[] protobufInstructions = Encoding.Default.GetBytes (protobufInstructionsString);
 		Code code = Code.Parser.ParseFrom (protobufInstructions);
 		Google.Protobuf.Collections.RepeatedField<Method> methods = code.Methods;
 
