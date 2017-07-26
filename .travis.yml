@@ -1,8 +1,5 @@
 language: objective-c
-<<<<<<< HEAD
 osx_image: xcode8.3
-rvm:
-- 2.2
 
 before_install:
 - chmod a+x ./scripts/*.sh
@@ -12,15 +9,4 @@ install:
 
 script:
 - ./scripts/build_project.sh rapid-router-unity
-=======
-osx_image: xcode8.1
-rvm:
-- 2.2
-before_install:
-- chmod a+x ./scripts/install_unity.sh
-- chmod a+x ./scripts/build_project.sh
-install:
-- ./scripts/install_unity.sh
-script:
-- ./scripts/build_project.sh
->>>>>>> Issue #75 Use Travis to start automating build
+
