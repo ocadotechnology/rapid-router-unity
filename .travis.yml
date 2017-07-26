@@ -1,11 +1,13 @@
 language: objective-c
-osx_image: xcode8.1
+osx_image: xcode8.3
 rvm:
 - 2.2
+
 before_install:
-- chmod a+x ./scripts/install_unity.sh
-- chmod a+x ./scripts/build_project.sh
+- chmod a+x ./scripts/*.sh
+
 install:
-- ./scripts/install_unity.sh
+- travis_retry ./scripts/install_unity.sh
+
 script:
-- ./scripts/build_project.sh
+- ./scripts/build_project.sh rapid-router-unity
