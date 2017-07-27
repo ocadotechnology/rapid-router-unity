@@ -1,7 +1,7 @@
 #! /bin/sh
 
 project=$1
-project_path=$(pwd)/src/$project
+project_path=$(pwd)
 log_file=$(pwd)/build/unity-mac.log
 
 error_code=0

@@ -5,7 +5,6 @@ HASH=a2913c821e27
 VERSION=5.6.2f1
 
 download() {
-  file=$1
   url="$BASE_URL/$HASH/$package"
 
   echo "Downloading from $url: "
