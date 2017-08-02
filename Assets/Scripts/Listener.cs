@@ -14,12 +14,21 @@ public class Listener : MonoBehaviour {
 		Code code = Code.Parser.ParseFrom (protobufInstructions);
 		Google.Protobuf.Collections.RepeatedField<Method> methods = code.Methods;
 
+		Method startMethod = GetStart (methods);
+
+		Google.Protobuf.Collections.RepeatedField<Instruction> instructions = startMethod.Instructions;
+		foreach (Instruction instruction in instructions) {
+			FollowInstruction (instruction);
+		}
+	}
+
+	private Method GetStart(Google.Protobuf.Collections.RepeatedField<Method> methods) {
 		foreach (Method method in methods) {
-			Google.Protobuf.Collections.RepeatedField<Instruction> instructions = method.Instructions;
-			foreach (Instruction instruction in instructions) {
-				FollowInstruction (instruction);
+			if (method.Name.Equals("Start")) {
+				return method;
 			}
 		}
+		throw new System.Exception ("No Start method found");
 	}
 
 	private void FollowInstruction(Instruction instruction) {
