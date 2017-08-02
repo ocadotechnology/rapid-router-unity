@@ -11,7 +11,7 @@ script:
 - ./scripts/build_project.sh rapid-router-unity
 
 after_success:
-- test $TRAVIS_BRANCH = "master" && ./scripts/export-package.sh OcadoTechnology rapid-router-unity
+- test $TRAVIS_BRANCH = "master" && ./scripts/create_release.sh OcadoTechnology rapid-router-unity
 
 git:
   depth: 10
