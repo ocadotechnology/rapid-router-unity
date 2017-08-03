@@ -10,7 +10,7 @@ echo "Building $project for iOS Platform."
 /Applications/Unity/Unity.app/Contents/MacOS/Unity \
   -batchmode \
   -logFile "$log_file" \
-  -quit
+  -quit \
   -executeMethod BuildBinaries.BuildForIOS
 if [ $? = 0 ] ; then
   echo "Building iOS binaries completed successfully."
