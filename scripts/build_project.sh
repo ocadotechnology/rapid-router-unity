@@ -6,20 +6,20 @@ log_file=$(pwd)/build/unity-mac.log
 
 error_code=0
 
-echo "Building $project for Mac OS."
+echo "Building $project for iOS Platform."
 /Applications/Unity/Unity.app/Contents/MacOS/Unity \
   -batchmode \
-  -nographics \
-  -silent-crashes \
   -logFile "$log_file" \
-  -projectPath "$project_path" \
-  -buildOSXUniversalPlayer "$(pwd)/build/osx/$project.app" \
   -quit
+  -executeMethod BuildBinaries.BuildForIOS
 if [ $? = 0 ] ; then
-  echo "Building Mac OS completed successfully."
+  echo "Building iOS binaries completed successfully."
+  echo "Zipping binaries..."
+  dir_to_zip = $(pwd)/iOSBuild
+  zip -r iosBuild.zip "$dir_to_zip"
   error_code=0
 else
-  echo "Building Mac OS failed. Exited with $?."
+  echo "Building iOS binaries failed. Exited with $?."
   error_code=1
 fi
 
