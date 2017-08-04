@@ -7,7 +7,7 @@ log_file=$(pwd)/build/unity-mac.log
 error_code=0
 
 echo "Copying certificates file for Unity license"
-cp $project_path/CACerts.pem  ~/.local/share/unity3d/Certificates/CACerts.pem
+cp $project_path/CACerts.pem  /Users/travis/Library/Unity/Certificates/CACerts.pem
 
 echo "Building $project for iOS Platform."
 /Applications/Unity/Unity.app/Contents/MacOS/Unity \
