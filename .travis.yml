@@ -1,18 +1,18 @@
 language: objective-c
 osx_image: xcode8.3
-
 before_install:
 - chmod a+x ./scripts/*.sh
-
 install:
 - travis_retry ./scripts/install_unity.sh
-
+- ./scripts/activate_license.sh
 script:
-- ./scripts/build_project.sh rapid-router-unity
-
-after_success:
-- test $TRAVIS_BRANCH = "master" && ./scripts/export-package.sh OcadoTechnology rapid-router-unity
-
+- "./scripts/build_project.sh rapid-router-unity"
 git:
   depth: 10
-
+deploy:
+  provider: releases
+  api_key:
+    secure: YaLU6sjY/6BbnWIq3wMRxOJjudqqOdvjuH4jd19vooxvhRUNvn5pRxHZrRh85c5/gd+DoUzuyKxJYfuKHGy8mylGBdH5uKRhQjFK1xcf61PNIOoznhr9dAiLpJmVlX7vGqhCqWCQHLgbpQk7o9trgoPmRILIjb1LpqBQwPGflR+NP5YqDe+iBfKV1T/VWGHCcnHCkmUlrZXXDTk6VPzTufDckPNcQ4TEyzUgZbS6+k8EOpWgDNVFt1XwbMcvZBtCoa8K0QSnTkBWbfn1rLWXFC0sYyJVTz7cXrzDam13bJNefqOn4wKwvcKuMowUPA0fgAxfkxa54EgRZirZQ9HdMsnVVmerItFiIpBj/D6NCDJ8gPU45EDodVGTSqB1O93gDxe5iecfNDXJl7Vd+vIK/odxTqBvo8f6i4BdqHv418+wv5iE70LWqltH0hsWjKUC2jV+3hAVn/CXzZ0WE1YtG1br8/IKpE9QxRDIwmY06BrTPOTTRF5sAIldFR1v0BHhWo0C0GJPUK2KMD0MruP4hafY2biVmfHnqi+ESemdQexx+xewQ5vVVo5P50SrFHI3q7i9+3uSPY/9MbXxya0nx+quhHIvZiSF+uRIShN1CfQg7XXXkRHMZ5Rs/QeT+5qYHZ4+GIJ3LLchpo4UTDSkG8LKzgecInfC/F7XZvk7Hj4=
+  file: iOSBuild.zip
+  on:
+    repo: ocadotechnology/rapid-router-unity
