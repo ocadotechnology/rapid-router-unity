@@ -3,7 +3,7 @@
 # Rapid Router in Unity
 An implementation of the Rapid Router game in Unity for devices
 
-## Building the Project
+## Continous Integration with Travis
 The project is currently built using TravisCI, and can be found here: [Ocado Technology Rapid Router Unity build](https://travis-ci.org/ocadotechnology/rapid-router-unity). A build is triggered for every push to a branch, each pull request, and a Cron job is setup to run every weekly. The current state of the master branch can be seen at the top of this ReadMe.
 
 ### Build and Pull Requests
