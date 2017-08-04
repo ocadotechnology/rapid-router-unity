@@ -5,13 +5,20 @@ log_file=$(pwd)/build/unity-mac.log
 
 error_code=0
 
-echo "Copying certificates file for Unity license"
-cp $pwd/CACerts.pem /Users/travis/Library/Unity/Certificates/
+echo "Create Certificate folder"
+mkdir ~/Library/Unity
+mkdir ~/Library/Unity/Certificates
+
+cp CACerts.pem ~/Library/Unity/Certificates/
+
+echo "Activating license"
+/Applications/Unity/Unity.app/Contents/MacOS/Unity -quit -batchmode -username ${UNITY_USERNAME} -password ${UNITY_PASSWORD} -logfile
 
 echo "Building $project for iOS Platform."
 /Applications/Unity/Unity.app/Contents/MacOS/Unity \
   -batchmode \
   -logFile "$log_file" \
+  -returnlicense \
   -quit \
   -executeMethod BuildBinaries.BuildForIOS
 if [ $? = 0 ] ; then
