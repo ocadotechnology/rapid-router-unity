@@ -11,7 +11,7 @@ echo "Building $project for iOS Platform."
   -logFile "$log_file" \
   -returnlicense \
   -quit \
-  -executeMethod BuildBinaries.BuildForIOS
+  -executeMethod "BuildBinaries.BuildForIOS"
 if [ $? = 0 ] ; then
   echo "Building iOS binaries completed successfully."
   echo "Zipping binaries..."
