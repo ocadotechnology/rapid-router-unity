@@ -1,14 +1,18 @@
 language: objective-c
-osx_image: xcode8.3
+
 before_install:
 - chmod a+x ./scripts/*.sh
+
 install:
 - travis_retry ./scripts/install_unity.sh
 - ./scripts/activate_license.sh
+
 script:
 - "./scripts/build_project.sh rapid-router-unity"
+
 git:
   depth: 10
+
 deploy:
   provider: releases
   api_key:

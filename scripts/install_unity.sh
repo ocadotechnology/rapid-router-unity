@@ -20,3 +20,4 @@ install() {
 }
 
 install "MacEditorInstaller/Unity-$VERSION.pkg"
+install "MacEditorTargetInstaller/UnitySetup-iOS-Support-for-Editor-$VERSION.pkg"

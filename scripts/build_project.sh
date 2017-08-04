@@ -7,7 +7,7 @@ error_code=0
 
 echo "Building $project for iOS Platform."
 /Applications/Unity/Unity.app/Contents/MacOS/Unity \
-  -batchmode \
+  -batchmode -nographics \
   -logFile "$log_file" \
   -returnlicense \
   -quit \
