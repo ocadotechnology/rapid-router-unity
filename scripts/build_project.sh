@@ -5,18 +5,6 @@ log_file=$(pwd)/build/unity-mac.log
 
 error_code=0
 
-echo "Create Certificate folder"
-mkdir ~/Library/Unity
-mkdir ~/Library/Unity/Certificates
-
-cp CACerts.pem ~/Library/Unity/Certificates/
-
-echo "Activating license"
-/Applications/Unity/Unity.app/Contents/MacOS/Unity \
--quit -batchmode \
--username ${UNITY_USERNAME} -password ${UNITY_PASSWORD} \
--logfile -nographics
-
 echo "Building $project for iOS Platform."
 /Applications/Unity/Unity.app/Contents/MacOS/Unity \
   -batchmode -nographics \
@@ -27,7 +15,7 @@ echo "Building $project for iOS Platform."
 if [ $? = 0 ] ; then
   echo "Building iOS binaries completed successfully."
   echo "Zipping binaries..."
-  dir_to_zip = $(pwd)/iOSBuild
+  dir_to_zip=$(pwd)/iOSBuild
   zip -r iosBuild.zip "$dir_to_zip"
   error_code=0
 else
