@@ -15,8 +15,7 @@ echo "Building $project for iOS Platform."
 if [ $? = 0 ] ; then
   echo "Building iOS binaries completed successfully."
   echo "Zipping binaries..."
-  dir_to_zip=$(pwd)/iOSBuild
-  zip -r iOSBuild.zip . -i "$dir_to_zip"
+  zip -r iOSBuild.zip . -i "$pwd/build/iOSBuild"
   error_code=0
 else
   echo "Building iOS binaries failed. Exited with $?."
