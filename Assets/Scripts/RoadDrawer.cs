@@ -5,14 +5,6 @@ using Zenject;
 
 namespace Road
 {
-    enum RoadType : int
-    {
-        DeadEnd = 1,
-        SingleSegment = 2,
-        TJunction = 3,
-        CrossRoads = 4
-    }
-
     public class RoadDrawer : MonoBehaviour
     {
 
@@ -22,176 +14,74 @@ namespace Road
         [Inject]
         Installer.Settings.RoadTiles tiles;
 
-        public GameObject[] SetupRoadSegments(PathNode[] nodes)
-        {
-            GameObject[] gameObjects = new GameObject[nodes.Length];
-            for (int currentIndex = 0; currentIndex < nodes.Length; currentIndex++)
-            {
-                gameObjects[currentIndex] = SetupRoadSegment(nodes, currentIndex);
-            }
-            return gameObjects;
-        }
+		public GameObject[] DrawRoad(RoadSegment[] roadSegments) {
+			GameObject[] gameObjects = new GameObject[roadSegments.Length];
+			for (int currentIndex = 0; currentIndex < roadSegments.Length; currentIndex++)
+			{
+				gameObjects[currentIndex] = DrawRoadSegment(roadSegments, currentIndex);
+			}
+			return gameObjects;
+		}
 
-        public GameObject SetupRoadSegment(PathNode[] nodes, int currentNodeIndex)
-        {
-            PathNode node = nodes[currentNodeIndex];
-            switch (node.connectedNodes.Length)
-            {
-                case 1:
-                    return DrawDeadEndSegment(nodes, node);
-                case 2:
-                    return DrawStraightOrTurnSegment(nodes, node);
-                case 3:
-                    return DrawTJunctionSegment(nodes, node);
-                case 4:
-                    return DrawCrossRoadSegment(node);
-                default:
-                    // should never get here
-                    return null;
-            }
-        }
+		public GameObject DrawRoadSegment(RoadSegment[] roadSegments, int currentSegmentIndex)
+		{
+			RoadSegment roadSegment = roadSegments[currentSegmentIndex];
+			switch (roadSegment.roadType)
+			{
+			case RoadType.DeadEnd:
+				return DrawDeadEnd(roadSegment.coords, roadSegment.direction);
+			case RoadType.Straight:
+				return DrawStraight(roadSegment.coords, roadSegment.direction);
+			case RoadType.Turn:
+				return DrawTurn (roadSegment.coords, roadSegment.direction);
+			case RoadType.TJunction:
+				return DrawTJunction(roadSegment.coords, roadSegment.direction);
+			case RoadType.CrossRoads:
+				return DrawCrossRoad(roadSegment.coords);
+			default:
+				// should never get here
+				return null;
+			}
+		}
 
-        public GameObject DrawDeadEndSegment(PathNode[] nodes, PathNode node)
-        {
-            PathNode connectedNode = nodes[node.connectedNodes[0]];
-            Direction direction = RelativeDirection(node, connectedNode);
-            float x = translator.translateToSceneRow(node.coords.x);
-            float y = translator.translateToSceneColumn(node.coords.y);
-            return Instantiate(tiles.deadEndRoadTile, new Vector3(x, y, 0f),
-                Quaternion.Euler(0, 0, (float)direction)) as GameObject;
-        }
+		public GameObject DrawDeadEnd(Coordinate coords, Direction direction)
+		{
+			float x = translator.translateToSceneRow(coords.x);
+			float y = translator.translateToSceneColumn(coords.y);
+			return Instantiate(tiles.deadEndRoadTile, new Vector3(x, y, 0f),
+				Quaternion.Euler(0, 0, (float)direction)) as GameObject;
+		}
 
-        public GameObject DrawStraightOrTurnSegment(PathNode[] nodes, PathNode node)
-        {
-            PathNode connectedNode1 = nodes[node.connectedNodes[0]];
-            PathNode connectedNode2 = nodes[node.connectedNodes[1]];
-            Direction direction1 = RelativeDirection(node, connectedNode1);
-            Direction direction2 = RelativeDirection(node, connectedNode2);
-            if (AreOppositeDirections(direction1, direction2))
-            {
-                return DrawStraightSegment(node, direction2);
-            }
-            else
-            {
-                return DrawTurnSegment(node, direction1, direction2);
-            }
-        }
+		public GameObject DrawStraight(Coordinate coords, Direction direction)
+		{
+			float x = translator.translateToSceneRow(coords.x);
+			float y = translator.translateToSceneColumn(coords.y);
+			return Instantiate(tiles.straightRoadTile, new Vector3(x, y, 0f),
+				Quaternion.Euler(0, 0, (float)direction)) as GameObject;
+		}
 
-        public GameObject DrawStraightSegment(PathNode node, Direction direction)
-        {
-            float x = translator.translateToSceneRow(node.coords.x);
-            float y = translator.translateToSceneColumn(node.coords.y);
-            return Instantiate(tiles.straightRoadTile, new Vector3(x, y, 0f),
-                Quaternion.Euler(0, 0, (float)direction)) as GameObject;
-        }
+		public GameObject DrawTurn(Coordinate coords, Direction direction)
+		{
+			float x = translator.translateToSceneRow(coords.x);
+			float y = translator.translateToSceneColumn(coords.y);
+			return Instantiate(tiles.turnRoadTile, new Vector3(x, y, 0f),
+				Quaternion.Euler(0, 0, (float)direction)) as GameObject;
+		}
 
-        public GameObject DrawTurnSegment(PathNode node, Direction direction1, Direction direction2)
-        {
-            float x = translator.translateToSceneRow(node.coords.x);
-            float y = translator.translateToSceneColumn(node.coords.y);
-            float rotationAngle = GetRotationAngleForTurnRoad(direction1, direction2);
-            return Instantiate(tiles.turnRoadTile, new Vector3(x, y, 0f),
-            Quaternion.Euler(0, 0, rotationAngle)) as GameObject;
-        }
+		public GameObject DrawTJunction(Coordinate coords, Direction direction)
+		{
+			float x = translator.translateToSceneRow(coords.x);
+			float y = translator.translateToSceneColumn(coords.y);
+			return Instantiate(tiles.tJunctionTile, new Vector3(x, y, 0f),
+				Quaternion.Euler(0, 0, (float)direction)) as GameObject;
+		}
 
-        private float GetRotationAngleForTurnRoad(Direction direction1, Direction direction2)
-        {
-            HashSet<Direction> directions = new HashSet<Direction>();
-            directions.Add(direction1);
-            directions.Add(direction2);
-            float rotationAngle = 0;
-            if (directions.Contains(Direction.North) && directions.Contains(Direction.East))
-            {
-                rotationAngle = (float)Direction.North;
-            }
-            else if (directions.Contains(Direction.South) && directions.Contains(Direction.East))
-            {
-                rotationAngle = (float)Direction.East;
-            }
-            else if (directions.Contains(Direction.North) && directions.Contains(Direction.West))
-            {
-                rotationAngle = (float)Direction.West;
-            }
-            else if (directions.Contains(Direction.South) && directions.Contains(Direction.West))
-            {
-                rotationAngle = (float)Direction.South;
-            }
-            return rotationAngle;
-        }
-
-        public GameObject DrawTJunctionSegment(PathNode[] nodes, PathNode node)
-        {
-            float x = translator.translateToSceneRow(node.coords.x);
-            float y = translator.translateToSceneColumn(node.coords.y);
-            Direction direction1 = RelativeDirection(node, nodes[node.connectedNodes[0]]);
-            Direction direction2 = RelativeDirection(node, nodes[node.connectedNodes[1]]);
-            Direction direction3 = RelativeDirection(node, nodes[node.connectedNodes[2]]);
-            int rotationAngle = GetRotationAngleForTJunctionRoad(direction1, direction2, direction3);
-            return Instantiate(tiles.tJunctionTile, new Vector3(x, y, 0f),
-            Quaternion.Euler(0, 0, rotationAngle)) as GameObject;
-        }
-
-        private int GetRotationAngleForTJunctionRoad(Direction direction1, Direction direction2, Direction direction3)
-        {
-            HashSet<Direction> directions = new HashSet<Direction>();
-            directions.Add(direction1);
-            directions.Add(direction2);
-            directions.Add(direction3);
-            if (directions.Contains(Direction.North) && directions.Contains(Direction.South))
-            {
-                directions.Remove(Direction.North);
-                directions.Remove(Direction.South);
-            }
-            else if (directions.Contains(Direction.West) && directions.Contains(Direction.East))
-            {
-                directions.Remove(Direction.West);
-                directions.Remove(Direction.East);
-            }
-            Direction direction = Direction.North;
-            foreach (Direction directionValue in directions)
-            {
-                direction = directionValue;
-            }
-            return (int)direction;
-        }
-
-        public GameObject DrawCrossRoadSegment(PathNode node)
-        {
-            float x = translator.translateToSceneRow(node.coords.x);
-            float y = translator.translateToSceneColumn(node.coords.y);
-            return Instantiate(tiles.crossRoadTile, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
-        }
-
-        public bool AreOppositeDirections(Direction direction1, Direction direction2)
-        {
-            HashSet<Direction> directions = new HashSet<Direction>();
-            directions.Add(direction1);
-            directions.Add(direction2);
-            return (directions.Contains(Direction.North) && directions.Contains(Direction.South)) ||
-                (directions.Contains(Direction.West) && directions.Contains(Direction.East));
-        }
-
-        public Direction RelativeDirection(PathNode subjectNode, PathNode otherNode)
-        {
-            if (subjectNode.coords.x < otherNode.coords.x)
-            {
-                return Direction.East;
-            }
-            else if (subjectNode.coords.x > otherNode.coords.x)
-            {
-                return Direction.West;
-            }
-            else if (subjectNode.coords.y < otherNode.coords.y)
-            {
-                return Direction.North;
-            }
-            else if (subjectNode.coords.y > otherNode.coords.y)
-            {
-                return Direction.South;
-            }
-            // should never get here
-            return Direction.North;
-        }
+		public GameObject DrawCrossRoad(Coordinate coords)
+		{
+			float x = translator.translateToSceneRow(coords.x);
+			float y = translator.translateToSceneColumn(coords.y);
+			return Instantiate(tiles.crossRoadTile, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+		}
 
         public static Direction StringToDirection(String directionString)
         {
