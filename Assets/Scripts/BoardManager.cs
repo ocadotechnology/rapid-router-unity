@@ -52,6 +52,9 @@ public class BoardManager : MonoBehaviour, IInitializable
 	[Inject]
 	Installer.Settings.RoadTiles roadTiles;
 
+	[Inject]
+	RoadBuilder roadBuilder;
+
     [Inject]
     RoadDrawer roadDrawer;
 
@@ -111,7 +114,8 @@ public class BoardManager : MonoBehaviour, IInitializable
 	private void SetupRoute() 
 	{
 		GameObject cfcOrigin = SetupOrigin (currentLevel.origin);
-		GameObject[] roadObjects = roadDrawer.SetupRoadSegments(currentLevel.path);
+		RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments (currentLevel.path);
+		GameObject[] roadObjects = roadDrawer.DrawRoad(roadSegments);
 		foreach (GameObject roadObject in roadObjects) {
 			Coordinate currCoord = new Coordinate(roadObject.transform.position);
 			roadCoordinates.Add(currCoord);
