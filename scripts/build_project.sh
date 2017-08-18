@@ -9,8 +9,6 @@ echo "Building $project for iOS Platform."
 /Applications/Unity/Unity.app/Contents/MacOS/Unity \
   -batchmode -nographics \
   -logFile "$log_file" \
-  -buildOutput "$pwd/build/iOSBuild" \
-  -buildPlatform ios \
   -returnlicense \
   -quit \
   -executeMethod BuildBinaries.BuildForIOS
