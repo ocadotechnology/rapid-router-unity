@@ -4,6 +4,7 @@ using UnityEngine;
 using Road;
 using Zenject;
 using DG.Tweening;
+using Com.LuisPedroFonseca.ProCamera2D;
 
 public enum Direction : int
 {
@@ -150,7 +151,8 @@ public class BoardManager : MonoBehaviour, IInitializable
 	private void SetupVan() 
 	{
 		GameObject van = GameObject.Find ("Van");
-		van.transform.position = translator.translateToSceneVector(currentLevel.origin.coords.vector);
+        van.transform.position = translator.translateToSceneVector(currentLevel.origin.coords.vector);
+        ProCamera2D.Instance.AddCameraTarget(van.transform);
 		int direction = (int)RoadDrawer.StringToDirection(currentLevel.origin.direction);
 
 		van.transform.rotation = Quaternion.identity;
