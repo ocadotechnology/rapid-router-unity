@@ -81,14 +81,16 @@ public class BoardManager : MonoBehaviour, IInitializable
 			GameObject.DestroyObject (currentBoard);
 		}
 		boardHolder = new GameObject("Board").transform;
-		SetupLevel(level);
-	}
+        SetupLevel(level);
+		boardHolder.Rotate(90f, 0f, 0f);
+        boardHolder.transform.localScale = new Vector3(5, 5, 5);
+    }
 
     private void SetupLevel(int levelNumber)
     {
         currentLevel = LevelReader.ReadLevelFromFile(levelNumber);
 
-        SetupBoard();
+        // SetupBoard();
 		SetupRoute ();
         SetupDecorations();
         SetupVan ();

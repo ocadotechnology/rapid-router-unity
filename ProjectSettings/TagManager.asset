@@ -3,8 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Fire
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -42,24 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Background
-    uniqueID: 1093696345
+  - name: Buildings
+    uniqueID: 1732285073
     locked: 0
-  - name: Foreground
-    uniqueID: 1859086223
-    locked: 0
-  - name: Bushes
-    uniqueID: 29016771
-    locked: 0
-  - name: Decor
-    uniqueID: 430650633
-    locked: 0
-  - name: Characters
-    uniqueID: 3940858523
-    locked: 0
-  - name: SFX
-    uniqueID: 132271319
-    locked: 0
-  - name: UI
-    uniqueID: 771169021
+  - name: Van
+    uniqueID: 3212224423
     locked: 0
