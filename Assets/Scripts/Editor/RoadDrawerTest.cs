@@ -46,10 +46,10 @@ namespace Tests
             nodes[0].connectedNodes = new int[] { 1 };
             nodes[1].connectedNodes = new int[] { 0 };
 
-			var roadDrawer = _container.Resolve<RoadDrawer>();
-			var roadBuilder = _container.Resolve<RoadBuilder>();
-			RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments(nodes);
-			GameObject[] gameObjects = roadDrawer.DrawRoad(roadSegments);
+            var roadDrawer = _container.Resolve<RoadDrawer>();
+            var roadBuilder = _container.Resolve<RoadBuilder>();
+            RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments(nodes);
+            GameObject[] gameObjects = roadDrawer.DrawRoad(roadSegments);
 
             AssertThatRoadSegmentIsCorrect(gameObjects[0], "DeadEnd(Clone)", new Vector3(2, 0, 0), Direction.East);
             AssertThatRoadSegmentIsCorrect(gameObjects[1], "DeadEnd(Clone)", new Vector3(3, 0, 0), Direction.West);
@@ -65,9 +65,9 @@ namespace Tests
             nodes[3].connectedNodes = new int[] { 2 };
 
             var roadDrawer = _container.Resolve<RoadDrawer>();
-			var roadBuilder = _container.Resolve<RoadBuilder>();
-			RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments(nodes);
-			GameObject[] gameObjects = roadDrawer.DrawRoad(roadSegments);
+            var roadBuilder = _container.Resolve<RoadBuilder>();
+            RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments(nodes);
+            GameObject[] gameObjects = roadDrawer.DrawRoad(roadSegments);
 
 
             AssertThatRoadSegmentIsCorrect(gameObjects[0], "DeadEnd(Clone)", new Vector3(2, 0, 0), Direction.East);
@@ -85,10 +85,10 @@ namespace Tests
             nodes[2].connectedNodes = new int[] { 1, 3 };
             nodes[3].connectedNodes = new int[] { 2 };
 
-			var roadDrawer = _container.Resolve<RoadDrawer>();
-			var roadBuilder = _container.Resolve<RoadBuilder>();
-			RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments(nodes);
-			GameObject[] gameObjects = roadDrawer.DrawRoad(roadSegments);
+            var roadDrawer = _container.Resolve<RoadDrawer>();
+            var roadBuilder = _container.Resolve<RoadBuilder>();
+            RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments(nodes);
+            GameObject[] gameObjects = roadDrawer.DrawRoad(roadSegments);
 
             AssertThatRoadSegmentIsCorrect(gameObjects[0], "DeadEnd(Clone)", new Vector3(2, 3, 0), Direction.East);
             AssertThatRoadSegmentIsCorrect(gameObjects[1], "Turn(Clone)", new Vector3(3, 3, 0), Direction.West);
@@ -105,10 +105,10 @@ namespace Tests
             nodes[2].connectedNodes = new int[] { 1, 3 };
             nodes[3].connectedNodes = new int[] { 2 };
 
-			var roadDrawer = _container.Resolve<RoadDrawer>();
-			var roadBuilder = _container.Resolve<RoadBuilder>();
-			RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments(nodes);
-			GameObject[] gameObjects = roadDrawer.DrawRoad(roadSegments);
+            var roadDrawer = _container.Resolve<RoadDrawer>();
+            var roadBuilder = _container.Resolve<RoadBuilder>();
+            RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments(nodes);
+            GameObject[] gameObjects = roadDrawer.DrawRoad(roadSegments);
 
             AssertThatRoadSegmentIsCorrect(gameObjects[0], "DeadEnd(Clone)", new Vector3(2, 3, 0), Direction.East);
             AssertThatRoadSegmentIsCorrect(gameObjects[1], "Turn(Clone)", new Vector3(3, 3, 0), Direction.South);
@@ -124,10 +124,10 @@ namespace Tests
             nodes[2].connectedNodes = new int[] { 1 };
             nodes[3].connectedNodes = new int[] { 1 };
 
-			var roadDrawer = _container.Resolve<RoadDrawer>();
-			var roadBuilder = _container.Resolve<RoadBuilder>();
-			RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments(nodes);
-			GameObject[] gameObjects = roadDrawer.DrawRoad(roadSegments);
+            var roadDrawer = _container.Resolve<RoadDrawer>();
+            var roadBuilder = _container.Resolve<RoadBuilder>();
+            RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments(nodes);
+            GameObject[] gameObjects = roadDrawer.DrawRoad(roadSegments);
 
             AssertThatRoadSegmentIsCorrect(gameObjects[0], "DeadEnd(Clone)", new Vector3(2, 3, 0), Direction.East);
             AssertThatRoadSegmentIsCorrect(gameObjects[1], "TJunction(Clone)", new Vector3(3, 3, 0), Direction.West);
@@ -144,10 +144,10 @@ namespace Tests
             nodes[3].connectedNodes = new int[] { 1 };
             nodes[4].connectedNodes = new int[] { 1 };
 
-			var roadDrawer = _container.Resolve<RoadDrawer>();
-			var roadBuilder = _container.Resolve<RoadBuilder>();
-			RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments(nodes);
-			GameObject[] gameObjects = roadDrawer.DrawRoad(roadSegments);
+            var roadDrawer = _container.Resolve<RoadDrawer>();
+            var roadBuilder = _container.Resolve<RoadBuilder>();
+            RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments(nodes);
+            GameObject[] gameObjects = roadDrawer.DrawRoad(roadSegments);
 
             AssertThatRoadSegmentIsCorrect(gameObjects[0], "DeadEnd(Clone)", new Vector3(2, 3, 0), Direction.East);
             AssertThatRoadSegmentIsCorrect(gameObjects[1], "CrossRoad(Clone)", new Vector3(3, 3, 0), Direction.North);
