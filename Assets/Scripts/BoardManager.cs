@@ -8,9 +8,9 @@ using DG.Tweening;
 public enum Direction : int
 {
     North = 0,
-    East = -90,
-    South = -180,
-    West = -270
+    East = 270,
+    South = 180,
+    West = 90
 };
 
 public class Level
@@ -83,7 +83,7 @@ public class BoardManager : MonoBehaviour, IInitializable
 		boardHolder = new GameObject("Board").transform;
         SetupLevel(level);
 		boardHolder.Rotate(90f, 0f, 0f);
-        boardHolder.transform.localScale = new Vector3(5, 5, 5);
+        // boardHolder.transform.localScale = new Vector3(5, 5, 5);
     }
 
     private void SetupLevel(int levelNumber)
@@ -152,21 +152,23 @@ public class BoardManager : MonoBehaviour, IInitializable
 	private void SetupVan() 
 	{
 		GameObject van = GameObject.Find ("Van");
-		van.transform.position = translator.translateToSceneVector(currentLevel.origin.coords.vector);
-		int direction = (int)RoadDrawer.StringToDirection(currentLevel.origin.direction);
+		van.transform.SetParent(boardHolder);
 
-		van.transform.rotation = Quaternion.identity;
-		van.transform.Rotate(new Vector3(0, 0, direction));
-		van.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-		van.transform.position += VehicleMover.ForwardABit(van.transform, 0.5f);
+		van.transform.localPosition = translator.translateToSceneVector(currentLevel.origin.coords.vector);
+        int direction = (int)RoadDrawer.StringToDirection(currentLevel.origin.direction);
+
+		// van.transform.rotation = Quaternion.identity;
+		van.transform.localEulerAngles = new Vector3(0, 0, direction);
+		van.transform.localPosition += VehicleMover.ForwardABit(van.transform, 0.5f);
+		// van.transform.localScale = new Vector3(1f, 1f, 1f);
 		DOTween.defaultEaseOvershootOrAmplitude = 0;
-        van.GetComponent<SpriteRenderer>().color = Color.white;
+        // van.GetComponent<SpriteRenderer>().color = Color.white;
 
-        BoardManager.SetBoardAsParent (van);
-	}
+        // BoardManager.SetBoardAsParent (van);
+    }
 
 	private static void SetStaticWithBoardAsParent(GameObject childObject) {
-		SetStatic (childObject);
+		// SetStatic (childObject);
 		SetBoardAsParent (childObject);
 	}
 
@@ -175,6 +177,6 @@ public class BoardManager : MonoBehaviour, IInitializable
 	}
 
 	public static void SetBoardAsParent(GameObject childObject) {
-		childObject.transform.SetParent(boardHolder);
+		childObject.transform.SetParent(boardHolder, true);
 	}
 }

@@ -11,7 +11,7 @@ public class VehicleMover : MonoBehaviour
         Left,
         Right
     }
-    public GameObject van;
+
     bool vanMoving = false;
 
     [Inject]
@@ -35,21 +35,21 @@ public class VehicleMover : MonoBehaviour
     public void StartLeft() {
         if (!vanMoving)
         {
-            StartCoroutine(Move(van.transform, 1, Steering.Left));
+            StartCoroutine(Move(transform, 1, Steering.Left));
             step++;
         }
     }
 
     public void StartRight() {
         if (!vanMoving) {
-            StartCoroutine(Move(van.transform, 1, Steering.Right));
+            StartCoroutine(Move(transform, 1, Steering.Right));
             step++;
         }
     }
 
     public void StartForward() {
         if (!vanMoving) {
-            StartCoroutine(Move(van.transform, 1, Steering.Forward));
+            StartCoroutine(Move(transform, 1, Steering.Forward));
             step++;
         }
     }
@@ -65,18 +65,18 @@ public class VehicleMover : MonoBehaviour
     }
 
     private void CheckIfOffRoading(Steering direction) {
-        Vector3 vanPosition = van.transform.position + ForwardABit(van.transform, 0.5f);
+        Vector3 vanPosition = transform.localPosition + ForwardABit(transform, 0.5f);
         Coordinate vanCoord = new Coordinate(vanPosition);
         if (!BoardManager.roadCoordinates.Contains(vanCoord)) {
-            var explosionInstance = Instantiate(explosion, van.transform.position, Quaternion.identity);
+            var explosionInstance = Instantiate(explosion, transform.position, Quaternion.identity);
             Destroy(explosionInstance, 5f);
-            van.GetComponent<SpriteRenderer>().DOColor(Color.black, 4f);
+            // GetComponent<SpriteRenderer>().DOColor(Color.black, 4f);
         }
     }
 
     private void CheckIfAtDestination()
     {
-        Vector3 vanPosition = van.transform.position + ForwardABit(van.transform, 0.5f);
+        Vector3 vanPosition = transform.position + ForwardABit(transform, 0.5f);
         Coordinate vanCoord = new Coordinate(translator.translateToGameVector(vanPosition));
         HashSet<Coordinate> dests = BoardManager.currentLevel.destinationCoords;
         if (dests.Contains(vanCoord)) {
@@ -102,24 +102,30 @@ public class VehicleMover : MonoBehaviour
     private Sequence LeftSequence(Transform transform, float duration)
     {
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForLeft(transform.rotation.eulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D).SetEase(Ease.InOutQuad).SetRelative());
-        sequence.Join(transform.DORotateQuaternion(Quaternion.Euler(0, 0, 90), duration).SetEase(Ease.InOutCubic).SetRelative());
+        sequence.Append(transform.DOLocalPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForLeft(transform.localEulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D).SetEase(Ease.InOutQuad).SetRelative());
+        sequence.Join(transform.DOLocalRotateQuaternion(Quaternion.Euler(0, 0, 90), duration).SetEase(Ease.InOutCubic).SetRelative());
         return sequence;
     }
 
     private Sequence RightSequence(Transform transform, float duration)
     {
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForRight(transform.rotation.eulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D).SetEase(Ease.InOutQuad).SetRelative());
-        sequence.Join(transform.DORotateQuaternion(Quaternion.Euler(0, 0, -90), duration).SetEase(Ease.InOutCubic).SetRelative());
+        sequence
+        .Append(transform.DOLocalPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForRight(transform.localEulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D)
+        .SetEase(Ease.InOutQuad)
+        .SetRelative());
+        sequence
+        .Join(transform.DOLocalRotateQuaternion(Quaternion.Euler(0, 0, -90), duration)
+        .SetEase(Ease.InOutCubic)
+        .SetRelative());
         return sequence;
     }
 
     private Sequence ForwardSequence(Transform transform, float duration)
     {
         Sequence sequence = DOTween.Sequence();
-        var newDirection = new Vector3(-Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), Mathf.Cos(Mathf.Deg2Rad * transform.rotation.eulerAngles.z), 0);
-        sequence.Append(transform.DOMove(newDirection, duration).SetRelative());
+        // var newDirection = new Vector3(Mathf.Cos(Mathf.Deg2Rad * transform.localEulerAngles.z), 0, -Mathf.Sin(Mathf.Deg2Rad * transform.localEulerAngles.z));
+        sequence.Append(transform.DOLocalMove(ForwardOne(transform), duration).SetRelative());
         return sequence;
     }
 
@@ -188,7 +194,7 @@ public class VehicleMover : MonoBehaviour
 
 	private static Vector3 ForwardOne(Transform transform)
     {
-        float degrees = transform.rotation.eulerAngles.z;
+        float degrees = transform.localEulerAngles.z;
         var vector = new Vector3(-Mathf.Sin(Mathf.Deg2Rad * degrees), Mathf.Cos(Mathf.Deg2Rad * degrees));
         return vector;
     }
