@@ -477,8 +477,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 343341755}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 327.5, y: 245.5, z: 0}
-  m_LocalScale: {x: 0.63964844, y: 0.63964844, z: 0.63964844}
+  m_LocalPosition: {x: 512, y: 384, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1140445874}
   m_Father: {fileID: 0}
@@ -506,6 +506,18 @@ MonoBehaviour:
 GameObject:
   m_PrefabParentObject: {fileID: 104482, guid: 3de54b7fdc2b14434b57407196006e6e, type: 2}
   m_PrefabInternal: {fileID: 1869691151}
+--- !u!114 &1140445870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1140445869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 104ddfe29def34dbda8df126f1f778fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosion: {fileID: 100000, guid: bf495eacf58e31146ab012aa89ac68da, type: 2}
 --- !u!4 &1140445874 stripped
 Transform:
   m_PrefabParentObject: {fileID: 417260, guid: 3de54b7fdc2b14434b57407196006e6e, type: 2}
@@ -619,7 +631,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -809,11 +821,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 417260, guid: 3de54b7fdc2b14434b57407196006e6e, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -512
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 417260, guid: 3de54b7fdc2b14434b57407196006e6e, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -209.39442
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 417260, guid: 3de54b7fdc2b14434b57407196006e6e, type: 2}
       propertyPath: m_LocalPosition.z
@@ -837,9 +849,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 417260, guid: 3de54b7fdc2b14434b57407196006e6e, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 95000012913119148, guid: 3de54b7fdc2b14434b57407196006e6e,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 95000012913119148, guid: 3de54b7fdc2b14434b57407196006e6e, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 3de54b7fdc2b14434b57407196006e6e, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1940909394
@@ -882,5 +900,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 104ddfe29def34dbda8df126f1f778fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  van: {fileID: 1140445869}
   explosion: {fileID: 100000, guid: bf495eacf58e31146ab012aa89ac68da, type: 2}
