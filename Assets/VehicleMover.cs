@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Zenject;
+using UnityEngine.XR.iOS;
 
 public class VehicleMover : MonoBehaviour
 {
@@ -20,6 +21,19 @@ public class VehicleMover : MonoBehaviour
     public GameObject explosion;
 
     int step = 0;
+
+    void Start() {
+        UnityARSessionNativeInterface.ARAnchorAddedEvent += AddAnchor;
+    }
+
+    public void AddAnchor(ARPlaneAnchor arPlaneAnchor) {
+        Debug.Log("Anchor Added");
+        Debug.Log(arPlaneAnchor.center);
+        var positionAR = UnityARMatrixOps.GetPosition (arPlaneAnchor.transform);
+        GameObject board = GameObject.Find("Board");
+        Debug.Log(board.renderer.bounds.size);
+        board.transform.position = new Vector3(positionAR.x + 8, positionAR.y, positionAR.z);
+    }
 
     // Update is called once per frame
     void Update() {
@@ -102,8 +116,14 @@ public class VehicleMover : MonoBehaviour
     private Sequence LeftSequence(Transform transform, float duration)
     {
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOLocalPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForLeft(transform.localEulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D).SetEase(Ease.InOutQuad).SetRelative());
-        sequence.Join(transform.DOLocalRotateQuaternion(Quaternion.Euler(0, 0, 90), duration).SetEase(Ease.InOutCubic).SetRelative());
+        sequence
+            .Append(transform.DOLocalPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForLeft(transform.localEulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D)
+            .SetEase(Ease.InOutQuad)
+            .SetRelative());
+        sequence
+            .Join(transform.DOLocalRotateQuaternion(Quaternion.Euler(0, 0, 90), duration)
+            .SetEase(Ease.InOutCubic)
+            .SetRelative());
         return sequence;
     }
 
@@ -111,13 +131,13 @@ public class VehicleMover : MonoBehaviour
     {
         Sequence sequence = DOTween.Sequence();
         sequence
-        .Append(transform.DOLocalPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForRight(transform.localEulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D)
-        .SetEase(Ease.InOutQuad)
-        .SetRelative());
+            .Append(transform.DOLocalPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForRight(transform.localEulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D)
+            .SetEase(Ease.InOutQuad)
+            .SetRelative());
         sequence
-        .Join(transform.DOLocalRotateQuaternion(Quaternion.Euler(0, 0, -90), duration)
-        .SetEase(Ease.InOutCubic)
-        .SetRelative());
+            .Join(transform.DOLocalRotateQuaternion(Quaternion.Euler(0, 0, -90), duration)
+            .SetEase(Ease.InOutCubic)
+            .SetRelative());
         return sequence;
     }
 
