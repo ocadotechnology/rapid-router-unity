@@ -144,27 +144,29 @@ namespace Utils
 		public ARTrackingState trackingState;
 		public ARTrackingStateReason trackingReason;
 		public UnityVideoParams videoParams;
+		public float ambientIntensity;
 		public serializablePointCloud pointCloud;
 
 
-		public serializableUnityARCamera( serializableUnityARMatrix4x4 wt, serializableUnityARMatrix4x4 pm, ARTrackingState ats, ARTrackingStateReason atsr, UnityVideoParams uvp, serializablePointCloud spc)
+		public serializableUnityARCamera( serializableUnityARMatrix4x4 wt, serializableUnityARMatrix4x4 pm, ARTrackingState ats, ARTrackingStateReason atsr, UnityVideoParams uvp, float ambIntensity, serializablePointCloud spc)
 		{
 			worldTransform = wt;
 			projectionMatrix = pm;
 			trackingState = ats;
 			trackingReason = atsr;
 			videoParams = uvp;
+			ambientIntensity = ambIntensity;
 			pointCloud = spc;
 		}
 
 		public static implicit operator serializableUnityARCamera(UnityARCamera rValue)
 		{
-			return new serializableUnityARCamera(rValue.worldTransform, rValue.projectionMatrix, rValue.trackingState, rValue.trackingReason, rValue.videoParams, rValue.pointCloudData);
+			return new serializableUnityARCamera(rValue.worldTransform, rValue.projectionMatrix, rValue.trackingState, rValue.trackingReason, rValue.videoParams, rValue.ambientIntensity, rValue.pointCloudData);
 		}
 
 		public static implicit operator UnityARCamera(serializableUnityARCamera rValue)
 		{
-			return new UnityARCamera (rValue.worldTransform, rValue.projectionMatrix, rValue.trackingState, rValue.trackingReason, rValue.videoParams, rValue.pointCloud);
+			return new UnityARCamera (rValue.worldTransform, rValue.projectionMatrix, rValue.trackingState, rValue.trackingReason, rValue.videoParams, rValue.ambientIntensity, rValue.pointCloud);
 		}
 
 
@@ -265,5 +267,53 @@ namespace Utils
 				return null;
 			}
 		}
+	};
+
+	[Serializable]
+	public class serializableARSessionConfiguration
+	{
+		public UnityARAlignment alignment; 
+		public UnityARPlaneDetection planeDetection;
+		public bool getPointCloudData;
+		public bool enableLightEstimation;
+
+		public serializableARSessionConfiguration(UnityARAlignment align, UnityARPlaneDetection planeDet, bool getPtCloud, bool enableLightEst)
+		{
+			alignment = align;
+			planeDetection = planeDet;
+			getPointCloudData = getPtCloud;
+			enableLightEstimation = enableLightEst;
+		}
+
+		public static implicit operator serializableARSessionConfiguration(ARKitWorldTackingSessionConfiguration awtsc)
+		{
+			return new serializableARSessionConfiguration (awtsc.alignment, awtsc.planeDetection, awtsc.getPointCloudData, awtsc.enableLightEstimation);
+		}
+
+		public static implicit operator ARKitWorldTackingSessionConfiguration (serializableARSessionConfiguration sasc)
+		{
+			return new ARKitWorldTackingSessionConfiguration (sasc.alignment, sasc.planeDetection, sasc.getPointCloudData, sasc.enableLightEstimation);
+		}
+	};
+
+	[Serializable]
+	public class serializableARKitInit
+	{
+		public serializableARSessionConfiguration config;
+		public UnityARSessionRunOption runOption;
+
+		public serializableARKitInit(serializableARSessionConfiguration cfg, UnityARSessionRunOption option)
+		{
+			config = cfg;
+			runOption = option;
+		}
+	};
+
+	[Serializable]
+	public class serializableFromEditorMessage
+	{
+		public Guid subMessageId;
+		public serializableARKitInit arkitConfigMsg;
+
 	};
 }

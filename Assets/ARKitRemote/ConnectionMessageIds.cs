@@ -11,5 +11,10 @@ namespace UnityEngine.XR.iOS
 		public static Guid removePlaneAnchorMsgeId { get { return new Guid("b07750a2-8825-4e86-9483-0b22b07df800"); } }
 		public static Guid screenCaptureYMsgId { get { return new Guid("25c3d26f-72c5-4f3e-9a1f-c8c9b859453b"); } }
 		public static Guid screenCaptureUVMsgId { get { return new Guid("d7f4d3cd-2d12-4ab7-b755-932fe7ab744d"); } }
-	}
+	};
+
+	public static class SubMessageIds
+	{
+		public static Guid editorInitARKit { get { return new Guid("2e5d7c45-daef-474d-bf55-1f02f0a10b69"); } }
+	};
 }

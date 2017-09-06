@@ -11,6 +11,16 @@ namespace UnityEngine.XR.iOS
 {
 	public class ARKitRemoteConnection : MonoBehaviour
 	{
+		[Header("AR Config Options")]
+		public UnityARAlignment startAlignment = UnityARAlignment.UnityARAlignmentGravity;
+		public UnityARPlaneDetection planeDetection = UnityARPlaneDetection.Horizontal;
+		public bool getPointCloud = true;
+		public bool enableLightEstimation = true;
+
+		[Header("Run Options")]
+		public bool resetTracking = true;
+		public bool removeExistingAnchors = true;
+
 		EditorConnection editorConnection ;
 
 		int currentPlayerID = -1;
@@ -25,13 +35,6 @@ namespace UnityEngine.XR.iOS
 		void Start () {
 
 			bTexturesInitialized = false;
-			//put some defaults so that it doesnt complain
-			UnityARCamera scamera = new UnityARCamera ();
-			scamera.worldTransform = new UnityARMatrix4x4 (new Vector4 (1, 0, 0, 0), new Vector4 (0, 1, 0, 0), new Vector4 (0, 0, 1, 0), new Vector4 (0, 0, 0, 1));
-			Matrix4x4 projMat = Matrix4x4.Perspective (60.0f, 1.33f, 0.1f, 30.0f);
-			scamera.projectionMatrix = new UnityARMatrix4x4 (projMat.GetColumn(0),projMat.GetColumn(1),projMat.GetColumn(2),projMat.GetColumn(3));
-
-			UnityARSessionNativeInterface.SetStaticCamera (scamera);
 
 
 			editorConnection = EditorConnection.instance;
@@ -97,8 +100,18 @@ namespace UnityEngine.XR.iOS
 			int yHeight = camera.videoParams.yHeight;
 			int uvWidth = yWidth / 2;
 			int uvHeight = yHeight / 2;
-			remoteScreenYTex = new Texture2D(yWidth,yHeight, TextureFormat.R8, false, true);
-			remoteScreenUVTex = new Texture2D(uvWidth,uvHeight, TextureFormat.RG16, false, true);
+			if (remoteScreenYTex == null || remoteScreenYTex.width != yWidth || remoteScreenYTex.height != yHeight) {
+				if (remoteScreenYTex) {
+					Destroy (remoteScreenYTex);
+				}
+				remoteScreenYTex = new Texture2D (yWidth, yHeight, TextureFormat.R8, false, true);
+			}
+			if (remoteScreenUVTex == null || remoteScreenUVTex.width != uvWidth || remoteScreenUVTex.height != uvHeight) {
+				if (remoteScreenUVTex) {
+					Destroy (remoteScreenUVTex);
+				}
+				remoteScreenUVTex = new Texture2D (uvWidth, uvHeight, TextureFormat.RG16, false, true);
+			}
 
 			bTexturesInitialized = true;
 		}
@@ -169,15 +182,24 @@ namespace UnityEngine.XR.iOS
 
 		void SendInitToPlayer()
 		{
-			// Input string.
-			const string input = "InitARKit";
-			byte[] array = Encoding.ASCII.GetBytes(input);
-			SendToPlayer (ConnectionMessageIds.fromEditorARKitSessionMsgId, array);
+			serializableFromEditorMessage sfem = new serializableFromEditorMessage ();
+			sfem.subMessageId = SubMessageIds.editorInitARKit;
+			serializableARSessionConfiguration ssc = new serializableARSessionConfiguration (startAlignment, planeDetection, getPointCloud, enableLightEstimation); 
+			UnityARSessionRunOption roTracking = resetTracking ? UnityARSessionRunOption.ARSessionRunOptionResetTracking : 0;
+			UnityARSessionRunOption roAnchors = removeExistingAnchors ? UnityARSessionRunOption.ARSessionRunOptionRemoveExistingAnchors : 0;
+			sfem.arkitConfigMsg = new serializableARKitInit (ssc, roTracking | roAnchors);
+			SendToPlayer (ConnectionMessageIds.fromEditorARKitSessionMsgId, sfem);
 		}
 
 		void SendToPlayer(System.Guid msgId, byte[] data)
 		{
 			editorConnection.Send (msgId, data);
+		}
+
+		public void SendToPlayer(System.Guid msgId, object serializableObject)
+		{
+			byte[] arrayToSend = serializableObject.SerializeToByteArray ();
+			SendToPlayer (msgId, arrayToSend);
 		}
 
 

@@ -22,7 +22,7 @@ namespace UnityEngine.XR.iOS
 			playerConnection = PlayerConnection.instance;
 			playerConnection.RegisterConnection(EditorConnected);
 			playerConnection.RegisterDisconnection(EditorDisconnected);
-			playerConnection.Register(ConnectionMessageIds.fromEditorARKitSessionMsgId, InitializeARKit);
+			playerConnection.Register(ConnectionMessageIds.fromEditorARKitSessionMsgId, HandleEditorMessage);
 			m_session = null;
 
 		}
@@ -34,19 +34,24 @@ namespace UnityEngine.XR.iOS
 			}
 		}
 
-
-		void InitializeARKit(MessageEventArgs mea)
+		void HandleEditorMessage(MessageEventArgs mea)
 		{
-			Debug.Log("init ARKit");
+			serializableFromEditorMessage sfem = mea.data.Deserialize<serializableFromEditorMessage>();
+			if (sfem != null && sfem.subMessageId == SubMessageIds.editorInitARKit) {
+				InitializeARKit ( sfem.arkitConfigMsg );
+			}
+		}
+
+		void InitializeARKit(serializableARKitInit sai)
+		{
 			#if !UNITY_EDITOR
+
+			//get the config and runoption from editor and use them to initialize arkit on device
 			Application.targetFrameRate = 60;
 			m_session = UnityARSessionNativeInterface.GetARSessionNativeInterface();
-			ARKitWorldTackingSessionConfiguration config = new ARKitWorldTackingSessionConfiguration();
-			config.planeDetection = UnityARPlaneDetection.Horizontal;
-			config.alignment = UnityARAlignment.UnityARAlignmentGravity;
-			config.getPointCloudData = true;
-			config.enableLightEstimation = true;
-			m_session.RunWithConfig(config);
+			ARKitWorldTackingSessionConfiguration config = sai.config;
+			UnityARSessionRunOption runOptions = sai.runOption;
+			m_session.RunWithConfigAndOptions(config, runOptions);
 
 		 	UnityARSessionNativeInterface.ARFrameUpdatedEvent += ARFrameUpdated;
 			UnityARSessionNativeInterface.ARAnchorAddedEvent += ARAnchorAdded;

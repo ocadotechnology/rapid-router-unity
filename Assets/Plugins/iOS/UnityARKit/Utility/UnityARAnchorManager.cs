@@ -29,8 +29,7 @@ namespace UnityEngine.XR.iOS
 			arpag.planeAnchor = arPlaneAnchor;
 			arpag.gameObject = go;
 			planeAnchorMap.Add (arPlaneAnchor.identifier, arpag);
-            Debug.Log("Anchor added");
-        }
+		}
 
 		public void RemoveAnchor(ARPlaneAnchor arPlaneAnchor)
 		{
@@ -48,8 +47,7 @@ namespace UnityEngine.XR.iOS
 				UnityARUtility.UpdatePlaneWithAnchorTransform (arpag.gameObject, arPlaneAnchor);
 				arpag.planeAnchor = arPlaneAnchor;
 				planeAnchorMap [arPlaneAnchor.identifier] = arpag;
-                Debug.Log("Anchor Updated");
-            }
+			}
 		}
 
         public void Destroy()
