@@ -11,11 +11,11 @@ echo "Building $project for iOS Platform."
   -logFile "$log_file" \
   -returnlicense \
   -quit \
-  -executeMethod BuildBinaries.BuildForIOS
+  -executeMethod BuildBinaries.BuildForIPhone
 if [ $? = 0 ] ; then
   echo "Building iOS binaries completed successfully."
   echo "Zipping binaries..."
-  zip -r iOSBuild.zip . -i "$pwd/build/iOSBuild"
+  zip -r iPhoneBuild.zip . -i "$pwd/build/iPhoneBuild"
   error_code=0
 else
   echo "Building iOS binaries failed. Exited with $?."
