@@ -6,7 +6,7 @@ public class GameManager: IInitializable {
 
 	[Inject]
 	BoardManager boardScript;
-	private static int level = 1;
+	private static int level = 13;
 
 	[PostInject]
     public void Initialize()

@@ -153,15 +153,20 @@ public class BoardManager : MonoBehaviour, IInitializable
 	{
 		GameObject van = GameObject.Find ("Van");
 		van.transform.SetParent(boardHolder);
+        van.GetComponent<VehicleMover>().enabled = true;
 
-		van.transform.localPosition = translator.translateToSceneVector(currentLevel.origin.coords.vector);
+        van.transform.localPosition = translator.translateToSceneVector(currentLevel.origin.coords.vector);
         int direction = (int)RoadDrawer.StringToDirection(currentLevel.origin.direction);
 
-		// van.transform.rotation = Quaternion.identity;
-		van.transform.localEulerAngles = new Vector3(0, 0, direction);
+        van.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+        // van.transform.rotation = Quaternion.identity;
+        van.transform.localEulerAngles = new Vector3(0, 0, direction);
+        van.transform.localEulerAngles += new Vector3(90, 0, 0);		
 		van.transform.localPosition += VehicleMover.ForwardABit(van.transform, 0.5f);
-		// van.transform.localScale = new Vector3(1f, 1f, 1f);
-		DOTween.defaultEaseOvershootOrAmplitude = 0;
+        van.transform.localPosition += new Vector3(0, 0, -0.16f);
+        // van.transform.localScale = new Vector3(1f, 1f, 1f);
+        DOTween.defaultEaseOvershootOrAmplitude = 0;
         // van.GetComponent<SpriteRenderer>().color = Color.white;
 
         // BoardManager.SetBoardAsParent (van);

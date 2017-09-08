@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using DG.Tweening;
 using Zenject;
 using UnityEngine.XR.iOS;
@@ -22,28 +23,118 @@ public class VehicleMover : MonoBehaviour
 
     int step = 0;
 
+    public Queue<IEnumerator> actions = new Queue<IEnumerator>();
+
+    public Dictionary<string, ARPlaneAnchor> anchors = new Dictionary<string, ARPlaneAnchor>();
+    public string currentAnchor = "";
+
     void Start() {
         UnityARSessionNativeInterface.ARAnchorAddedEvent += AddAnchor;
+        UnityARSessionNativeInterface.ARAnchorUpdatedEvent += UpdateAnchor;
+        UnityARSessionNativeInterface.ARAnchorRemovedEvent += RemoveAnchor;
+        StartCoroutine("Process", Process());
     }
 
     public void AddAnchor(ARPlaneAnchor arPlaneAnchor) {
-        Debug.Log("Anchor Added");
-        Debug.Log(arPlaneAnchor.center);
-        var positionAR = UnityARMatrixOps.GetPosition (arPlaneAnchor.transform);
+        anchors.Add(arPlaneAnchor.identifier, arPlaneAnchor);
+        if (currentAnchor != "") {
+            return;
+        }
+        UpdateBoardWithAnchor(arPlaneAnchor);
+        currentAnchor = arPlaneAnchor.identifier;
+        // Debug.Log("Anchor Added");
+        // Debug.Log("Plane position: " + arPlaneAnchor.extent);
+        // Debug.Log("Plane Anchor extent: " + arPlaneAnchor.extent);
+        // var positionAR = UnityARMatrixOps.GetPosition (arPlaneAnchor.transform);
+        // Debug.Log("positionAR: " + positionAR);
+        // GameObject board = GameObject.Find("Board");
+        // Debug.Log("Board position: " + board.transform.position);
+        // Bounds maxBounds = GetMaxBounds(board);
+        // Debug.Log("Board Extents: " + maxBounds.extents);
+        // Debug.Log("Board min: " + maxBounds.min);
+        // Debug.Log("Board max: " + maxBounds.max);
+        // Debug.Log("Board bounds center: " + maxBounds.center);
+        // board.transform.position = new Vector3(positionAR.x - maxBounds.min.x, positionAR.y - 1, positionAR.z + 3);
+    }
+
+    public void UpdateBoardWithAnchor(ARPlaneAnchor arPlaneAnchor) {
         GameObject board = GameObject.Find("Board");
-        Debug.Log(board.renderer.bounds.size);
-        board.transform.position = new Vector3(positionAR.x + 8, positionAR.y, positionAR.z);
+        var positionAR = UnityARMatrixOps.GetPosition (arPlaneAnchor.transform);
+        Bounds maxBounds = GetMaxBounds(board);
+        board.transform.position = new Vector3(positionAR.x - maxBounds.min.x, positionAR.y - 1, positionAR.z + 3);
+    }
+
+    public void UpdateAnchor(ARPlaneAnchor arPlaneAnchor) {
+        if (anchors.ContainsKey (arPlaneAnchor.identifier)) {
+				ARPlaneAnchor arpag = anchors [arPlaneAnchor.identifier];
+				// UnityARUtility.UpdatePlaneWithAnchorTransform (arpag.gameObject, arPlaneAnchor);
+				// arpag.planeAnchor = arPlaneAnchor;
+				anchors [arPlaneAnchor.identifier] = arPlaneAnchor;
+            if (currentAnchor == arPlaneAnchor.identifier) {
+                UpdateBoardWithAnchor(arPlaneAnchor);
+            }
+		}
+    }
+
+    public void RemoveAnchor(ARPlaneAnchor arPlaneAnchor) {
+        if (anchors.ContainsKey (arPlaneAnchor.identifier)) {
+				ARPlaneAnchor arpag = anchors [arPlaneAnchor.identifier];
+				anchors.Remove (arPlaneAnchor.identifier);
+                if (currentAnchor == arPlaneAnchor.identifier) {
+                    if (anchors.Keys.Count > 0) {
+                    var e = anchors.GetEnumerator();
+                    e.MoveNext();
+                    var newCurrentAnchor = e.Current.Value;
+                    currentAnchor = newCurrentAnchor.identifier;
+                    UpdateBoardWithAnchor(newCurrentAnchor);
+                } else {
+                        currentAnchor = "";
+                    }
+                }
+		}
+    }
+
+    Bounds GetMaxBounds(GameObject g) {
+        var b = new Bounds(g.transform.position, Vector3.zero);
+        foreach (Renderer r in g.GetComponentsInChildren<Renderer>()) {
+            b.Encapsulate(r.bounds);
+        }
+        return b;
     }
 
     // Update is called once per frame
     void Update() {
-        if (Input.GetKey("up")) {
+        if (Input.GetKeyDown("up")) {
             StartForward();
-        } else if (Input.GetKey("left")) {
+        } else if (Input.GetKeyDown("left")) {
             StartLeft();
-        } else if (Input.GetKey("right")) {
+        } else if (Input.GetKeyDown("right")) {
             StartRight();
         }
+    }
+
+    public IEnumerator Process() {
+        while (true) {
+            if (actions.Count > 0) {
+                yield return StartCoroutine(actions.Dequeue());
+            } else {
+
+                yield return null;
+            }
+        }
+    }
+
+    public void AddMoveLeftAction() {
+        Debug.Log("Adding Left");
+        actions.Enqueue(Move(transform, 1, Steering.Left));
+    }
+
+    public void AddMoveRightAction() {
+        actions.Enqueue(Move(transform, 1, Steering.Right));
+    }
+
+    public void AddMoveForwardAction() {
+        actions.Enqueue(Move(transform, 1, Steering.Forward));
     }
 
     public void StartLeft() {
@@ -82,15 +173,15 @@ public class VehicleMover : MonoBehaviour
         Vector3 vanPosition = transform.localPosition + ForwardABit(transform, 0.5f);
         Coordinate vanCoord = new Coordinate(vanPosition);
         if (!BoardManager.roadCoordinates.Contains(vanCoord)) {
-            var explosionInstance = Instantiate(explosion, transform.position, Quaternion.identity);
-            Destroy(explosionInstance, 5f);
+            // var explosionInstance = Instantiate(explosion, transform.position, Quaternion.identity);
+            // Destroy(explosionInstance, 5f);
             // GetComponent<SpriteRenderer>().DOColor(Color.black, 4f);
         }
     }
 
     private void CheckIfAtDestination()
     {
-        Vector3 vanPosition = transform.position + ForwardABit(transform, 0.5f);
+        Vector3 vanPosition = transform.localPosition + ForwardABit(transform, 0.5f);
         Coordinate vanCoord = new Coordinate(translator.translateToGameVector(vanPosition));
         HashSet<Coordinate> dests = BoardManager.currentLevel.destinationCoords;
         if (dests.Contains(vanCoord)) {
@@ -117,7 +208,7 @@ public class VehicleMover : MonoBehaviour
     {
         Sequence sequence = DOTween.Sequence();
         sequence
-            .Append(transform.DOLocalPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForLeft(transform.localEulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D)
+            .Append(transform.DOLocalPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForLeft((float)Math.Round(transform.localEulerAngles.y, 0)) }, duration, PathType.CatmullRom, PathMode.TopDown2D)
             .SetEase(Ease.InOutQuad)
             .SetRelative());
         sequence
@@ -131,7 +222,7 @@ public class VehicleMover : MonoBehaviour
     {
         Sequence sequence = DOTween.Sequence();
         sequence
-            .Append(transform.DOLocalPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForRight(transform.localEulerAngles.z) }, duration, PathType.CatmullRom, PathMode.TopDown2D)
+            .Append(transform.DOLocalPath(new Vector3[] { ForwardABit(transform, 0.2f), Deg2LocForRight((float)Math.Round(transform.localEulerAngles.y, 0)) }, duration, PathType.CatmullRom, PathMode.TopDown2D)
             .SetEase(Ease.InOutQuad)
             .SetRelative());
         sequence
@@ -158,7 +249,7 @@ public class VehicleMover : MonoBehaviour
         }
         else if (degrees == 90)
         {
-            vector = new Vector3(-1, -1, 0);
+            vector = new Vector3(1, 1, 0);
         }
         else if (degrees == 180)
         {
@@ -166,7 +257,7 @@ public class VehicleMover : MonoBehaviour
         }
         else if (degrees == 270)
         {
-            vector = new Vector3(1, 1, 0);
+            vector = new Vector3(-1, -1, 0);
         }
         else
         {
@@ -186,7 +277,7 @@ public class VehicleMover : MonoBehaviour
         }
         else if (degrees == 270)
         {
-            vector = new Vector3(1, -1, 0);
+            vector = new Vector3(-1, 1, 0);
         }
         else if (degrees == 180)
         {
@@ -194,7 +285,7 @@ public class VehicleMover : MonoBehaviour
         }
         else if (degrees == 90)
         {
-            vector = new Vector3(-1, 1, 0);
+            vector = new Vector3(1, -1, 0);
         }
         else
         {
@@ -214,8 +305,22 @@ public class VehicleMover : MonoBehaviour
 
 	private static Vector3 ForwardOne(Transform transform)
     {
-        float degrees = transform.localEulerAngles.z;
-        var vector = new Vector3(-Mathf.Sin(Mathf.Deg2Rad * degrees), Mathf.Cos(Mathf.Deg2Rad * degrees));
+        float degrees = transform.localEulerAngles.y;
+        var vector = new Vector3(Mathf.Sin(Mathf.Deg2Rad * degrees), Mathf.Cos(Mathf.Deg2Rad * degrees));
         return vector;
+    }
+
+    public void SolveLevel13() {
+        AddMoveLeftAction();
+        AddMoveRightAction();
+        AddMoveForwardAction();
+        AddMoveLeftAction();
+        AddMoveRightAction();
+        AddMoveForwardAction();
+        AddMoveForwardAction();
+        AddMoveRightAction();
+        AddMoveForwardAction();
+        AddMoveForwardAction();
+        AddMoveForwardAction();
     }
 }
