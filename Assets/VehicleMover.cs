@@ -90,10 +90,12 @@ public class VehicleMover : MonoBehaviour
 
         // if (mf != null) {
         //since our plane mesh is actually 10mx10m in the world, we scale it here by 0.1f
-        // board.transform.localScale = new Vector3(arPlaneAnchor.extent.x ,arPlaneAnchor.extent.y ,arPlaneAnchor.extent.z );
+        var scalingFactor = 0.11f;
+        var scale = Mathf.Min(arPlaneAnchor.extent.x, arPlaneAnchor.extent.z);
+        board.transform.localScale = new Vector3(scale * scalingFactor, scale * scalingFactor, scale * scalingFactor);
 
         //convert our center position to unity coords
-        board.transform.localPosition = new Vector3(center.x + 2, center.y - 1, -center.z + 1);
+        board.transform.localPosition = new Vector3(-center.x, center.y, -center.z);
         // }
     }
 
