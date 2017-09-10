@@ -19,8 +19,8 @@ public class UnityARCameraManager : MonoBehaviour {
         ARKitWorldTackingSessionConfiguration config = new ARKitWorldTackingSessionConfiguration();
         config.planeDetection = UnityARPlaneDetection.Horizontal;
         config.alignment = UnityARAlignment.UnityARAlignmentGravity;
-        config.getPointCloudData = true;
-        config.enableLightEstimation = true;
+        // config.getPointCloudData = true;
+        // config.enableLightEstimation = true;
         m_session.RunWithConfig(config);
 
 		if (m_camera == null) {

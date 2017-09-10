@@ -5,6 +5,7 @@ using System;
 using DG.Tweening;
 using Zenject;
 using UnityEngine.XR.iOS;
+// using System.Linq;
 
 public class VehicleMover : MonoBehaviour
 {
@@ -21,11 +22,19 @@ public class VehicleMover : MonoBehaviour
 
     public GameObject explosion;
 
+    public GameObject fireworks1;
+
+    public GameObject fireworks2;
     int step = 0;
 
     public Queue<IEnumerator> actions = new Queue<IEnumerator>();
 
     public Dictionary<string, ARPlaneAnchor> anchors = new Dictionary<string, ARPlaneAnchor>();
+
+    private List<Vector3> recentPositions = new List<Vector3>();
+    private List<Vector3> recentRotations = new List<Vector3>();
+
+    private List<Vector3> recentCenters = new List<Vector3>();
     public string currentAnchor = "";
 
     void Start() {
@@ -58,10 +67,49 @@ public class VehicleMover : MonoBehaviour
     }
 
     public void UpdateBoardWithAnchor(ARPlaneAnchor arPlaneAnchor) {
+        recentPositions.Add(UnityARMatrixOps.GetPosition(arPlaneAnchor.transform));
+        recentRotations.Add(UnityARMatrixOps.GetRotation(arPlaneAnchor.transform).eulerAngles);
+        recentCenters.Add(arPlaneAnchor.center);
+
+        KeepLast(8, recentPositions);
+        KeepLast(8, recentRotations);
+        KeepLast(8, recentCenters);
+
+
+        GameObject arHolder = GameObject.Find("ARHolder");
         GameObject board = GameObject.Find("Board");
-        var positionAR = UnityARMatrixOps.GetPosition (arPlaneAnchor.transform);
-        Bounds maxBounds = GetMaxBounds(board);
-        board.transform.position = new Vector3(positionAR.x - maxBounds.min.x, positionAR.y - 1, positionAR.z + 3);
+        // var positionAR = UnityARMatrixOps.GetPosition (arPlaneAnchor.transform);
+        // Bounds maxBounds = GetMaxBounds(board);
+        // board.transform.position = new Vector3(positionAR.x - maxBounds.min.x, positionAR.y - 1, positionAR.z + 3);
+        //do coordinate conversion from ARKit to Unity
+        arHolder.transform.position = GetAverage(recentPositions);
+        arHolder.transform.rotation = UnityARMatrixOps.GetRotation(arPlaneAnchor.transform); //Quaternion.Euler(GetAverageRotation());
+
+        Vector3 center = GetAverage(recentCenters);
+        // MeshFilter mf = plane.GetComponentInChildren<MeshFilter> ();
+
+        // if (mf != null) {
+        //since our plane mesh is actually 10mx10m in the world, we scale it here by 0.1f
+        // board.transform.localScale = new Vector3(arPlaneAnchor.extent.x ,arPlaneAnchor.extent.y ,arPlaneAnchor.extent.z );
+
+        //convert our center position to unity coords
+        board.transform.localPosition = new Vector3(center.x + 2, center.y - 1, -center.z + 1);
+        // }
+    }
+
+    private void KeepLast<T>(int n, List<T> list) {
+        if (list.Count > n) {
+            list.RemoveRange(0, list.Count - n);
+        }
+    }
+
+    private Vector3 GetAverage(List<Vector3> vectors) {
+        Vector3 average = new Vector3(0, 0, 0);
+        foreach (Vector3 vector in vectors)
+        {
+            average += vector;
+        }
+        return average / (float)vectors.Count;
     }
 
     public void UpdateAnchor(ARPlaneAnchor arPlaneAnchor) {
@@ -81,13 +129,16 @@ public class VehicleMover : MonoBehaviour
 				ARPlaneAnchor arpag = anchors [arPlaneAnchor.identifier];
 				anchors.Remove (arPlaneAnchor.identifier);
                 if (currentAnchor == arPlaneAnchor.identifier) {
-                    if (anchors.Keys.Count > 0) {
-                    var e = anchors.GetEnumerator();
-                    e.MoveNext();
-                    var newCurrentAnchor = e.Current.Value;
-                    currentAnchor = newCurrentAnchor.identifier;
-                    UpdateBoardWithAnchor(newCurrentAnchor);
-                } else {
+                    recentPositions.Clear();
+                    recentRotations.Clear();
+                    recentCenters.Clear();
+                if (anchors.Keys.Count > 0) {
+                        var e = anchors.GetEnumerator();
+                        e.MoveNext();
+                        var newCurrentAnchor = e.Current.Value;
+                        currentAnchor = newCurrentAnchor.identifier;
+                        UpdateBoardWithAnchor(newCurrentAnchor);
+                    } else {
                         currentAnchor = "";
                     }
                 }
@@ -118,14 +169,12 @@ public class VehicleMover : MonoBehaviour
             if (actions.Count > 0) {
                 yield return StartCoroutine(actions.Dequeue());
             } else {
-
                 yield return null;
             }
         }
     }
 
     public void AddMoveLeftAction() {
-        Debug.Log("Adding Left");
         actions.Enqueue(Move(transform, 1, Steering.Left));
     }
 
@@ -186,6 +235,10 @@ public class VehicleMover : MonoBehaviour
         HashSet<Coordinate> dests = BoardManager.currentLevel.destinationCoords;
         if (dests.Contains(vanCoord)) {
             print("You have reached your destination(s) (in a sat nav voice)");
+            GameObject f1 = Instantiate(fireworks1, transform.position, transform.rotation);
+            GameObject f2 = Instantiate(fireworks2, transform.position, transform.rotation);
+            f1.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            f2.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         }
     }
 

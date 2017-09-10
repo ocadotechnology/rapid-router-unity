@@ -60,6 +60,8 @@ public class BoardManager : MonoBehaviour, IInitializable
 
     private static Transform boardHolder;
 
+    public static Transform arHolder;
+
     [Inject]
     BoardTranslator translator;
 
@@ -77,12 +79,17 @@ public class BoardManager : MonoBehaviour, IInitializable
 	public void SetupScene(int level)
 	{
 		GameObject currentBoard = GameObject.Find ("Board");
-		if (currentBoard != null) {
+        GameObject currentARHolder = GameObject.Find("ARHolder");
+        if (currentBoard != null) {
 			GameObject.DestroyObject (currentBoard);
-		}
-		boardHolder = new GameObject("Board").transform;
+            GameObject.DestroyObject(currentARHolder);
+        }
+        arHolder = new GameObject("ARHolder").transform;
+        boardHolder = new GameObject("Board").transform;
+        boardHolder.SetParent(arHolder);
         SetupLevel(level);
 		boardHolder.Rotate(90f, 0f, 0f);
+        boardHolder.localScale = new Vector3(0.35f, 0.35f, 0.35f);
         // boardHolder.transform.localScale = new Vector3(5, 5, 5);
     }
 

@@ -29,10 +29,13 @@ public class DecorDrawer : MonoBehaviour
             {
                 float row = translator.translateToSceneRow(decoration.x / 100f, false);
                 float column = translator.translateToSceneColumn(decoration.y / 100f, false);
-                decorationObjects[currentIndex] = Instantiate(tile,
-                                    new Vector3(row, column, 0f),
-                                    Quaternion.identity) as GameObject;
-            } else {
+                decorationObjects[currentIndex] = Instantiate(
+                    tile, 
+                    new Vector3(row, column, 0f), 
+                    rotation: Quaternion.Euler(-90, 0, 0)) as GameObject;
+            }
+            else
+            {
                 decorationObjects[currentIndex] = new GameObject();
             }
         }
