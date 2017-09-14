@@ -21,18 +21,49 @@ public class VehicleMover : MonoBehaviour
 
     int step = 0;
 
+    private Queue<IEnumerator> actions = new Queue<IEnumerator>();
+
+    void Start() {
+        StartCoroutine("Process", Process());
+    }
+
     // Update is called once per frame
     void Update() {
         if (Input.GetKey("up")) {
-            StartForward();
+            // StartForward();
+            AddMoveForwardAction();
         } else if (Input.GetKey("left")) {
-            StartLeft();
+            // StartLeft();
+            AddMoveLeftAction();
         } else if (Input.GetKey("right")) {
-            StartRight();
+            // StartRight();
+            AddMoveRightAction();
         }
     }
 
-    public void StartLeft() {
+    private IEnumerator Process() {
+        while (true) {
+            if (actions.Count > 0) {
+                yield return StartCoroutine(actions.Dequeue());
+            } else {
+                yield return null;
+            }
+        }
+    }
+
+    public void AddMoveLeftAction() {
+        actions.Enqueue(Move(van.transform, 1, Steering.Left));
+    }
+
+    public void AddMoveRightAction() {
+        actions.Enqueue(Move(van.transform, 1, Steering.Right));
+    }
+
+    public void AddMoveForwardAction() {
+        actions.Enqueue(Move(van.transform, 1, Steering.Forward));
+    }
+
+    public virtual void StartLeft() {
         if (!vanMoving)
         {
             StartCoroutine(Move(van.transform, 1, Steering.Left));
@@ -40,15 +71,17 @@ public class VehicleMover : MonoBehaviour
         }
     }
 
-    public void StartRight() {
+    public virtual void StartRight() {
         if (!vanMoving) {
             StartCoroutine(Move(van.transform, 1, Steering.Right));
             step++;
         }
     }
 
-    public void StartForward() {
-        if (!vanMoving) {
+    public virtual void StartForward()
+    {
+        if (!vanMoving)
+        {
             StartCoroutine(Move(van.transform, 1, Steering.Forward));
             step++;
         }

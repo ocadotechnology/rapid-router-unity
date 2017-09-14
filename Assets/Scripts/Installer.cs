@@ -17,6 +17,7 @@ public class Installer : MonoInstaller
         Container.Bind<RoadBuilder>().ToSingleGameObject();
         Container.Bind<RoadDrawer>().ToSingleGameObject();
         Container.Bind<DecorDrawer>().ToSingleGameObject();
+        Container.Bind<CodeExecutor>().ToSingleGameObject();
         InstallSettings();
     }
     
