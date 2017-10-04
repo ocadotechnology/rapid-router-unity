@@ -211,6 +211,7 @@ MonoBehaviour:
       tJunctionTile: {fileID: 135178, guid: d84cda2dd0feb428ba488ac45d708552, type: 2}
       crossRoadTile: {fileID: 109670, guid: ca05b791f7d9c484db1d8cd88bb3e6b5, type: 2}
       cfcTile: {fileID: 180496, guid: 7230cf8782d4549ca98e9b7072835f88, type: 2}
+      houseTile: {fileID: 108474, guid: 014aa349742d149d29438ccaad15eac7, type: 2}
     floorTiles:
       grassTile: {fileID: 146650, guid: 2ac98e935a4924a68bd25a4916f04a7a, type: 2}
     decorationTiles:
@@ -450,7 +451,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc824279e4d1e41b6a635aa9bcc9b732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropdown: {fileID: 0}
 --- !u!224 &1324909130
 RectTransform:
   m_ObjectHideFlags: 0
