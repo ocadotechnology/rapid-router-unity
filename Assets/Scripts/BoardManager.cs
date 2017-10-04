@@ -58,6 +58,9 @@ public class BoardManager : MonoBehaviour, IInitializable
     [Inject]
     RoadDrawer roadDrawer;
 
+	[Inject]
+	HouseDrawer houseDrawer;
+
     [Inject]
     DecorDrawer decorDrawer;
 
@@ -121,11 +124,11 @@ public class BoardManager : MonoBehaviour, IInitializable
 			roadCoordinates.Add(currCoord);
 		}
 
-		GameObject homeDestination = SetupDestinations(currentLevel.destinationCoords);
+		List<GameObject> homeDestinations = SetupDestinations(roadSegments, currentLevel.destinationCoords);
 
 		List<GameObject> roadObjectsList = new List<GameObject>(roadObjects);
 		roadObjectsList.Add (cfcOrigin);
-		roadObjectsList.Add (homeDestination);
+		roadObjectsList.AddRange (homeDestinations);
 		foreach (GameObject roadObject in roadObjectsList) {
 			SetStaticWithBoardAsParent (roadObject);
 		}
@@ -139,9 +142,9 @@ public class BoardManager : MonoBehaviour, IInitializable
 			Quaternion.Euler(0, 0, (float)direction)) as GameObject;
 	}
 
-	private GameObject SetupDestinations(HashSet<Coordinate> destinationNodes)
+	private List<GameObject> SetupDestinations(RoadSegment[] roadSegments, HashSet<Coordinate> destinationNodes)
 	{
-		return new GameObject ();
+		return houseDrawer.DrawHouses(roadSegments, destinationNodes);
 	}
 
 	private void SetupDecorations() {
