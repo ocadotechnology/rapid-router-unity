@@ -13,6 +13,13 @@ public class BuildBinaries : MonoBehaviour {
         buildPlayerOptions.locationPathName = "iPhoneBuild";
         buildPlayerOptions.target = BuildTarget.iPhone;
         buildPlayerOptions.options = BuildOptions.None;
+        
+        Console.WriteLine ("locationPathName: " + buildPlayerOptions.locationPathName);
+        Console.WriteLine ("target: " + buildPlayerOptions.target);
+        Console.WriteLine ("targetGroup: " + buildPlayerOptions.targetGroup);
+        Console.WriteLine ("scenes: " + buildPlayerOptions.scenes);
+        Console.WriteLine ("assetBundleManifestPath: " + buildPlayerOptions.assetBundleManifestPath);
+        
         BuildPipeline.BuildPlayer(buildPlayerOptions);
     }
 }
