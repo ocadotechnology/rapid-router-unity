@@ -12,6 +12,11 @@ public class HouseDrawer : MonoBehaviour {
 	[Inject]
 	Installer.Settings.RoadTiles tiles;
 
+	private const float DeadEndHouseDistance = 0.75f;
+	private const float StraightHouseDistance =  0.75f;
+	private const float TurnHouseDistance = 0.55f;
+	private const float TJunctionHouseDistance = 0.75f;
+
 	public List<GameObject> DrawHouses (RoadSegment[] roadSegments, HashSet<Coordinate> destinationCoords) {
 		List<GameObject> houses = new List<GameObject>();
 		foreach (RoadSegment roadSegment in roadSegments) {
@@ -43,7 +48,7 @@ public class HouseDrawer : MonoBehaviour {
 
 		Vector3 roadPosition = new Vector3(sceneX, sceneY, 0f);
 
-		return Instantiate(tiles.houseTile, roadPosition + (ToDirectionVector(ToRadians((float)direction)) * 0.75f),
+		return Instantiate(tiles.houseTile, roadPosition + (ToDirectionVector(ToRadians((float)direction)) * DeadEndHouseDistance),
 				Quaternion.Euler(0, 0, (float)direction + 90)) as GameObject;
 	}
 
@@ -53,7 +58,7 @@ public class HouseDrawer : MonoBehaviour {
 
 		Vector3 roadPosition = new Vector3(sceneX, sceneY, 0f);
 
-		return Instantiate(tiles.houseTile, roadPosition - (ToDirectionVector(ToRadians((float)direction)) * 0.75f),
+		return Instantiate(tiles.houseTile, roadPosition - (ToDirectionVector(ToRadians((float)direction)) * StraightHouseDistance),
 				Quaternion.Euler(0, 0, (float)direction - 90)) as GameObject;
 	}
 
@@ -63,7 +68,7 @@ public class HouseDrawer : MonoBehaviour {
 
 		Vector3 roadPosition = new Vector3(sceneX, sceneY, 0f);
 
-		return Instantiate(tiles.houseTile, roadPosition - (ToDirectionVector(ToRadians((float)direction + 45)) * 0.55f),
+		return Instantiate(tiles.houseTile, roadPosition - (ToDirectionVector(ToRadians((float)direction + 45)) * TurnHouseDistance),
 				Quaternion.Euler(0, 0, (float)direction - 45)) as GameObject;
 	}
 
@@ -73,7 +78,7 @@ public class HouseDrawer : MonoBehaviour {
 
 		Vector3 roadPosition = new Vector3(sceneX, sceneY, 0f);
 
-		return Instantiate(tiles.houseTile, roadPosition - (ToDirectionVector(ToRadians((float)direction + 90)) * 0.75f),
+		return Instantiate(tiles.houseTile, roadPosition - (ToDirectionVector(ToRadians((float)direction + 90)) * TJunctionHouseDistance),
 				Quaternion.Euler(0, 0, (float)direction)) as GameObject;
 	}
 
