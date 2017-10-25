@@ -4,7 +4,7 @@ using UnityEngine;
 using Road;
 using Zenject;
 
-public class HouseDrawer : MonoBehaviour{
+public class HouseDrawer : MonoBehaviour {
 
 	[Inject]
 	BoardTranslator translator;
@@ -46,7 +46,7 @@ public class HouseDrawer : MonoBehaviour{
 		return Instantiate(tiles.houseTile, roadPosition + (ToDirectionVector(ToRadians((float)direction)) * 0.75f),
 				Quaternion.Euler(0, 0, (float)direction + 90)) as GameObject;
 	}
-	
+
 	private GameObject DrawHouseAtStraight (Coordinate coords, Direction direction) {
 		float sceneX = translator.translateToSceneRow(coords.x);
 		float sceneY = translator.translateToSceneColumn(coords.y);
