@@ -1,16 +1,17 @@
 using NUnit.Framework;
-using System.Runtime.CompilerServices;
+using (ShimsContext.Create());
 
 [assembly: InternalsVisibleTo("Tests")]
 
 namespace Tests
 {
-    public class BoardTranslatorTest
+    public class DeviceCommunicatorTest
     {
         [Test]
-        public void CheckEndLevelMessageBroadcasted()
+        public void TestEndLevelMessageSent()
         {
-            
+            ShimDeviceCommunicator.EndLevel = (status) => LevelCompleteStatus.SUCCESSFUL;
+            Assert.AreEqual(LevelCompleteStatus.SUCCESSFUL, DeviceCommunicator.EndLevel(LevelCompleteStatus.FAILED));
         }
     }
 }
