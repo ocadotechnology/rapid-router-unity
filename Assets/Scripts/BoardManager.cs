@@ -100,16 +100,18 @@ public class BoardManager : MonoBehaviour, IInitializable
 
 	private void SetupBoard()
 	{
+		GameObject tileParent = new GameObject("tileParent");
 		for (int x = 0; x < columns; x++)
 		{
 			for (int y = 0; y < rows; y++)
 			{
-				SetStaticWithBoardAsParent(
-					Instantiate(floorTiles.grassTile, 
-								new Vector3(x, y, 0f),
-								Quaternion.identity) as GameObject);
+				GameObject tile = Instantiate(floorTiles.grassTile, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+				SetStatic(tile);
+				tile.transform.SetParent(tileParent.transform);
 			}
 		}
+		tileParent.transform.position = new Vector3(-0.5f, 0f, 0f);
+		SetBoardAsParent(tileParent);
 	}
 
 	private void SetupRoute() 
@@ -168,16 +170,19 @@ public class BoardManager : MonoBehaviour, IInitializable
         BoardManager.SetBoardAsParent (van);
 	}
 
-	private static void SetStaticWithBoardAsParent(GameObject childObject) {
+	private static void SetStaticWithBoardAsParent(GameObject childObject)
+	{
 		SetStatic (childObject);
 		SetBoardAsParent (childObject);
 	}
 
-	private static void SetStatic(GameObject staticObject) {
+	private static void SetStatic(GameObject staticObject)
+	{
 		staticObject.isStatic = true;
 	}
 
-	public static void SetBoardAsParent(GameObject childObject) {
+	public static void SetBoardAsParent(GameObject childObject)
+	{
 		childObject.transform.SetParent(boardHolder);
 	}
 }
