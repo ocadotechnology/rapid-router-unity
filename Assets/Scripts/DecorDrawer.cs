@@ -7,9 +7,6 @@ using Zenject;
 public class DecorDrawer : MonoBehaviour
 {
     [Inject]
-    BoardTranslator translator;
-
-    [Inject]
     Installer.Settings.DecorationTiles tiles;
 
     public GameObject[] SetupDecorations(LevelDecor[] decorations)
@@ -27,8 +24,8 @@ public class DecorDrawer : MonoBehaviour
             tile = null;
             if (nameToTile.TryGetValue(decoration.decorName, out tile))
             {
-                float row = translator.translateToSceneRow(decoration.x / 100f, false);
-                float column = translator.translateToSceneColumn(decoration.y / 100f, false);
+                float row = decoration.x / 100f;
+                float column = decoration.y / 100f;
                 decorationObjects[currentIndex] = Instantiate(tile,
                                     new Vector3(row, column, 0f),
                                     Quaternion.identity) as GameObject;
