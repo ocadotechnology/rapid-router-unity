@@ -67,12 +67,10 @@ public class BoardManager : MonoBehaviour, IInitializable
     private static Transform boardHolder;
 
     [Inject]
-    BoardTranslator translator;
-
-    [Inject]
     Installer.Settings.MapSettings mapDimensions;
 
 	public static HashSet<Coordinate> roadCoordinates = new HashSet<Coordinate>();
+	private const float BackgroundLeftBoundaryPadding = -0.5f;
 
     [PostInject]
     public void Initialize() {
@@ -102,16 +100,18 @@ public class BoardManager : MonoBehaviour, IInitializable
 
 	private void SetupBoard()
 	{
+		GameObject backgroundTileParent = new GameObject("BackgroundTiles");
 		for (int x = 0; x < columns; x++)
 		{
 			for (int y = 0; y < rows; y++)
 			{
-				SetStaticWithBoardAsParent(
-					Instantiate(floorTiles.grassTile, 
-								new Vector3(translator.translateToSceneRow(x, true), translator.translateToSceneColumn(y, true), 0f),
-								Quaternion.identity) as GameObject);
+				GameObject tile = Instantiate(floorTiles.grassTile, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+				SetStatic(tile);
+				tile.transform.SetParent(backgroundTileParent.transform);
 			}
 		}
+		backgroundTileParent.transform.position = new Vector3(BackgroundLeftBoundaryPadding, 0f, 0f);
+		SetBoardAsParent(backgroundTileParent);
 	}
 
 	private void SetupRoute() 
@@ -120,7 +120,7 @@ public class BoardManager : MonoBehaviour, IInitializable
 		RoadSegment[] roadSegments = roadBuilder.CreateRoadSegments (currentLevel.path);
 		GameObject[] roadObjects = roadDrawer.DrawRoad(roadSegments);
 		foreach (GameObject roadObject in roadObjects) {
-			Coordinate currCoord = new Coordinate(roadObject.transform.position);
+			Coordinate currCoord = new Coordinate(roadObject.transform.localPosition);
 			roadCoordinates.Add(currCoord);
 		}
 
@@ -138,7 +138,7 @@ public class BoardManager : MonoBehaviour, IInitializable
 	{
 		Direction direction = RoadDrawer.StringToDirection(origin.direction);
 		Coordinate coords = origin.coords;
-		return Instantiate(roadTiles.cfcTile, new Vector3(translator.translateToSceneRow(coords.x), translator.translateToSceneColumn(coords.y), 0f),
+		return Instantiate(roadTiles.cfcTile, new Vector3(coords.x, coords.y, 0f),
 			Quaternion.Euler(0, 0, (float)direction)) as GameObject;
 	}
 
@@ -157,29 +157,32 @@ public class BoardManager : MonoBehaviour, IInitializable
 	private void SetupVan() 
 	{
 		GameObject van = GameObject.Find ("Van");
-		van.transform.position = translator.translateToSceneVector(currentLevel.origin.coords.vector);
+		van.transform.localPosition = currentLevel.origin.coords.vector;
 		int direction = (int)RoadDrawer.StringToDirection(currentLevel.origin.direction);
 
 		van.transform.rotation = Quaternion.identity;
 		van.transform.Rotate(new Vector3(0, 0, direction));
 		van.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-		van.transform.position += VehicleMover.ForwardABit(van.transform, 0.5f);
+		van.transform.localPosition += VehicleMover.ForwardABit(van.transform, 0.5f);
 		DOTween.defaultEaseOvershootOrAmplitude = 0;
         van.GetComponent<SpriteRenderer>().color = Color.white;
 
         BoardManager.SetBoardAsParent (van);
 	}
 
-	private static void SetStaticWithBoardAsParent(GameObject childObject) {
+	private static void SetStaticWithBoardAsParent(GameObject childObject)
+	{
 		SetStatic (childObject);
 		SetBoardAsParent (childObject);
 	}
 
-	private static void SetStatic(GameObject staticObject) {
+	private static void SetStatic(GameObject staticObject)
+	{
 		staticObject.isStatic = true;
 	}
 
-	public static void SetBoardAsParent(GameObject childObject) {
+	public static void SetBoardAsParent(GameObject childObject)
+	{
 		childObject.transform.SetParent(boardHolder);
 	}
 }
