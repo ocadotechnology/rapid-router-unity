@@ -70,6 +70,7 @@ public class BoardManager : MonoBehaviour, IInitializable
     Installer.Settings.MapSettings mapDimensions;
 
 	public static HashSet<Coordinate> roadCoordinates = new HashSet<Coordinate>();
+	private const float BackgroundLeftBoundaryPadding = -0.5f;
 
     [PostInject]
     public void Initialize() {
@@ -83,8 +84,7 @@ public class BoardManager : MonoBehaviour, IInitializable
 		if (currentBoard != null) {
 			GameObject.DestroyObject (currentBoard);
 		}
-		GameObject newBoard = new GameObject("Board");
-		boardHolder = newBoard.transform;
+		boardHolder = new GameObject("Board").transform;
 		SetupLevel(level);
 	}
 
@@ -100,18 +100,18 @@ public class BoardManager : MonoBehaviour, IInitializable
 
 	private void SetupBoard()
 	{
-		GameObject tileParent = new GameObject("tileParent");
+		GameObject backgroundTileParent = new GameObject("BackgroundTiles");
 		for (int x = 0; x < columns; x++)
 		{
 			for (int y = 0; y < rows; y++)
 			{
 				GameObject tile = Instantiate(floorTiles.grassTile, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
 				SetStatic(tile);
-				tile.transform.SetParent(tileParent.transform);
+				tile.transform.SetParent(backgroundTileParent.transform);
 			}
 		}
-		tileParent.transform.position = new Vector3(-0.5f, 0f, 0f);
-		SetBoardAsParent(tileParent);
+		backgroundTileParent.transform.position = new Vector3(BackgroundLeftBoundaryPadding, 0f, 0f);
+		SetBoardAsParent(backgroundTileParent);
 	}
 
 	private void SetupRoute() 
