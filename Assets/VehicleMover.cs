@@ -14,9 +14,6 @@ public class VehicleMover : MonoBehaviour
     public GameObject van;
     bool vanMoving = false;
 
-    [Inject]
-    BoardTranslator translator;
-
     public GameObject explosion;
 
     int step = 0;
@@ -77,7 +74,7 @@ public class VehicleMover : MonoBehaviour
     private void CheckIfAtDestination()
     {
         Vector3 vanPosition = van.transform.position + ForwardABit(van.transform, 0.5f);
-        Coordinate vanCoord = new Coordinate(translator.translateToGameVector(vanPosition));
+        Coordinate vanCoord = new Coordinate(vanPosition);
         HashSet<Coordinate> dests = BoardManager.currentLevel.destinationCoords;
         if (dests.Contains(vanCoord)) {
             print("You have reached your destination(s) (in a sat nav voice)");

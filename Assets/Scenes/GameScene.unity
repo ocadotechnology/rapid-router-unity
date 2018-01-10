@@ -286,13 +286,13 @@ MonoBehaviour:
   NumericBoundaries: {fileID: 1667658928}
   AreBoundariesRelative: 1
   UseTopBoundary: 1
-  TopBoundary: 6
+  TopBoundary: 14
   UseBottomBoundary: 1
-  BottomBoundary: -7
+  BottomBoundary: 0
   UseLeftBoundary: 1
-  LeftBoundary: -10
+  LeftBoundary: -1
   UseRightBoundary: 1
-  RightBoundary: 9
+  RightBoundary: 19
   TransitionDuration: 1
   TransitionEaseType: 0
   ChangeZoom: 0
