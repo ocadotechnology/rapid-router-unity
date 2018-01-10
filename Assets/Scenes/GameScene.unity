@@ -395,8 +395,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 343341755}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 845, y: 446, z: 0}
-  m_LocalScale: {x: 1.6503906, y: 1.6503906, z: 1.6503906}
+  m_LocalPosition: {x: 760, y: 451, z: 0}
+  m_LocalScale: {x: 1.484375, y: 1.484375, z: 1.484375}
   m_Children:
   - {fileID: 1140445874}
   m_Father: {fileID: 0}
@@ -437,6 +437,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1324909130}
   - component: {fileID: 1324909129}
+  - component: {fileID: 1324909131}
   m_Layer: 5
   m_Name: ChapterController
   m_TagString: Untagged
@@ -473,6 +474,17 @@ RectTransform:
   m_AnchoredPosition: {x: 56, y: 963}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1324909131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1324909128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44cdd9f2a93fd4c23b4056ecbc6a38fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1667658920
 GameObject:
   m_ObjectHideFlags: 0

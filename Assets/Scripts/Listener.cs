@@ -1,18 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
-using Zenject;
+﻿using UnityEngine;
+using Google.Protobuf;
+using System;
 
-public class Listener : MonoBehaviour {
+public class Listener : MonoBehaviour
+{
 
-	[Inject]
-	CodeExecutor codeExecutor;
+    public CodeExecutor codeExecutor;
 
-	public void Listen(string protobufInstructionsString) {
-		byte[] protobufInstructions = Encoding.Default.GetBytes (protobufInstructionsString);
-		Code code = Code.Parser.ParseFrom (protobufInstructions);
+    public void Awake()
+    {
+        codeExecutor = new CodeExecutor();
+    }
 
-		codeExecutor.Run (code);
-	}
+    public void Listen(string protobufInstructionsString)
+    {
+        Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");
+        Code code = JsonParser.Default.Parse<Code>(protobufInstructionsString);
+
+        codeExecutor.Run(code);
+    }
 }
