@@ -13,7 +13,6 @@ namespace Tests
     public class RoadDrawerTest {
 
         DiContainer _container;
-        BoardTranslator translatorMock;
 
         Vector3 Plane = Vector3.forward;
 
@@ -24,7 +23,6 @@ namespace Tests
             var mapSettings = new Installer.Settings.MapSettings();
             mapSettings.columns = 0;
             mapSettings.rows = 0;
-            var translatorMock = new BoardTranslator(mapSettings);
 
             var roadTilesMock = new Installer.Settings.RoadTiles();
             roadTilesMock.cfcTile = new GameObject("CFC");
@@ -34,7 +32,6 @@ namespace Tests
             roadTilesMock.crossRoadTile = new GameObject("CrossRoad");
             roadTilesMock.tJunctionTile = new GameObject("TJunction");
 
-            _container.BindInstance(translatorMock);
             _container.BindInstance(roadTilesMock);
             _container.Bind<RoadDrawer>().ToSingleGameObject();
             _container.Bind<RoadBuilder>().ToSingleGameObject();

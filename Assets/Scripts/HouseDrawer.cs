@@ -4,11 +4,8 @@ using UnityEngine;
 using Road;
 using Zenject;
 
-public class HouseDrawer : MonoBehaviour {
-
-	[Inject]
-	BoardTranslator translator;
-
+public class HouseDrawer : MonoBehaviour 
+{
 	[Inject]
 	Installer.Settings.RoadTiles tiles;
 
@@ -43,40 +40,28 @@ public class HouseDrawer : MonoBehaviour {
 	}
 
 	private GameObject DrawHouseAtDeadEnd (Coordinate coords, Direction direction) {
-		float sceneX = translator.translateToSceneRow(coords.x);
-		float sceneY = translator.translateToSceneColumn(coords.y);
-
-		Vector3 roadPosition = new Vector3(sceneX, sceneY, 0f);
+		Vector3 roadPosition = new Vector3(coords.x, coords.y, 0f);
 
 		return Instantiate(tiles.houseTile, roadPosition + (ToDirectionVector(ToRadians((float)direction)) * DeadEndHouseDistance),
 				Quaternion.Euler(0, 0, (float)direction + 90)) as GameObject;
 	}
 
 	private GameObject DrawHouseAtStraight (Coordinate coords, Direction direction) {
-		float sceneX = translator.translateToSceneRow(coords.x);
-		float sceneY = translator.translateToSceneColumn(coords.y);
-
-		Vector3 roadPosition = new Vector3(sceneX, sceneY, 0f);
+		Vector3 roadPosition = new Vector3(coords.x, coords.y, 0f);
 
 		return Instantiate(tiles.houseTile, roadPosition - (ToDirectionVector(ToRadians((float)direction)) * StraightHouseDistance),
 				Quaternion.Euler(0, 0, (float)direction - 90)) as GameObject;
 	}
 
 	private GameObject DrawHouseAtTurn (Coordinate coords, Direction direction) {
-		float sceneX = translator.translateToSceneRow(coords.x);
-		float sceneY = translator.translateToSceneColumn(coords.y);
-
-		Vector3 roadPosition = new Vector3(sceneX, sceneY, 0f);
+		Vector3 roadPosition = new Vector3(coords.x, coords.y, 0f);
 
 		return Instantiate(tiles.houseTile, roadPosition - (ToDirectionVector(ToRadians((float)direction + 45)) * TurnHouseDistance),
 				Quaternion.Euler(0, 0, (float)direction - 45)) as GameObject;
 	}
 
 	private GameObject DrawHouseAtTJunction (Coordinate coords, Direction direction) {
-		float sceneX = translator.translateToSceneRow(coords.x);
-		float sceneY = translator.translateToSceneColumn(coords.y);
-
-		Vector3 roadPosition = new Vector3(sceneX, sceneY, 0f);
+		Vector3 roadPosition = new Vector3(coords.x, coords.y, 0f);
 
 		return Instantiate(tiles.houseTile, roadPosition - (ToDirectionVector(ToRadians((float)direction + 90)) * TJunctionHouseDistance),
 				Quaternion.Euler(0, 0, (float)direction)) as GameObject;
