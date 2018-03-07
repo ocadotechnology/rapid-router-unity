@@ -7,7 +7,7 @@ using Zenject;
 public class VehicleMover : MonoBehaviour
 {
     enum Steering {
-        Forward, 
+        Forward,
         Left,
         Right
     }
@@ -17,6 +17,8 @@ public class VehicleMover : MonoBehaviour
     public GameObject explosion;
 
     int step = 0;
+
+    DeviceCommunicator communicator;
 
     // Update is called once per frame
     void Update() {
@@ -78,6 +80,7 @@ public class VehicleMover : MonoBehaviour
         HashSet<Coordinate> dests = BoardManager.currentLevel.destinationCoords;
         if (dests.Contains(vanCoord)) {
             print("You have reached your destination(s) (in a sat nav voice)");
+            communicator.EndLevel(LevelCompleteStatus.SUCCESSFUL);
         }
     }
 
